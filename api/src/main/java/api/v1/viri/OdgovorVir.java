@@ -2,7 +2,7 @@ package api.v1.viri;
 
 import api.v1.preslikovalci.MapperResponseObject;
 import com.kumuluz.ee.rest.beans.QueryParameters;
-import entitete.Vprasanje;
+import entitete.Odgovor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,9 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import napake.EntitetaNeObstajaException;
 import responses.vprasanje.FindAllResponse;
-import storitve.VprasanjeStoritev;
-import zahteve.vprasanje.NovoVprasanjeZahteva;
-import zahteve.vprasanje.PosodobiVprasanjeZahteva;
+import storitve.OdgovorStoritev;
+import zahteve.odgovor.NovOdgovorZahteva;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -24,24 +23,24 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @ApplicationScoped
-@Path("vprasanja")
+@Path("odgovori")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class VprasanjeVir {
+public class OdgovorVir {
 	
 	@Inject
-	private VprasanjeStoritev vprasanjeStoritev;
+	private OdgovorStoritev odgovorStoritev;
 	
 	@Context
 	private UriInfo uriInfo;
-
+	
 	@Operation(
-		summary = "Pridobi seznam vprašanj",
-		tags = {"vprašanje"},
-		description = "Vrne vsa vprašanja",
+		summary = "Pridobi seznam odgovorov",
+		tags = {"odgovor"},
+		description = "Vrne vse odgovore na vprašanja",
 		responses = {
 			@ApiResponse(
-				description = "Seznam vprašanj", responseCode = "200",
+				description = "Seznam odgovorov", responseCode = "200",
 				content = @Content(
 					schema = @Schema(
 						implementation = FindAllResponse.class
@@ -52,25 +51,24 @@ public class VprasanjeVir {
 		}
 	)
 	@GET
-	public Response vrniVsaVprasanja() {
+	public Response vrniVse() {
 		QueryParameters query = QueryParameters.query(uriInfo.getRequestUri().getQuery()).build();
-		List<Vprasanje> vprasanja = vprasanjeStoritev.vrniVsaVprasanja(query);
-		long steviloVsehZadetkov = vprasanjeStoritev.prestejVseZadetke();
-		
-		FindAllResponse res = new FindAllResponse(vprasanja, steviloVsehZadetkov, query);
+		List<Odgovor> seznam = odgovorStoritev.vrniVseOdgovore(query);
+		long steviloVsehZadetkov = odgovorStoritev.prestejVseZadetke();
+		FindAllResponse res = new FindAllResponse(seznam, steviloVsehZadetkov, query);
 		return Response.status(Response.Status.OK).entity(res).build();
 	}
 
 	@Operation(
-		summary = "Pridobi vprašanje",
-		tags = {"vprašanje"},
-		description = "Vrne vprašanje z podanim id-jem",
+		summary = "Pridobi odgovor",
+		tags = {"odgovor"},
+		description = "Vrne odgovor z podanim id-jem",
 		responses = {
 			@ApiResponse(
-				description = "Vprašanje z podanim id-jem", responseCode = "200",
+				description = "Odgovor z podanim id-jem", responseCode = "200",
 				content = @Content(
 					schema = @Schema(
-						implementation = Vprasanje.class
+						implementation = Odgovor.class
 					)
 				)
 			),
@@ -86,42 +84,42 @@ public class VprasanjeVir {
 	)
 	@GET
 	@Path("{id}")
-	public Response vrniEnoVprasanje(@PathParam("id") long id) throws EntitetaNeObstajaException {
-		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(id);
-		return Response.status(Response.Status.OK).entity(vprasanje).build();
+	public Response vrniEnega(@PathParam("id") long id) throws EntitetaNeObstajaException {
+		Odgovor odgovor = odgovorStoritev.vrniEnOdgovor(id);
+		return Response.status(Response.Status.OK).entity(odgovor).build();
 	}
 
 	@Operation(
-		summary = "Shrani vprašanje",
-		tags = {"vprašanje"},
-		description = "Shrani vprašanje",
+		summary = "shrani odgovor",
+		tags = {"odgovor"},
+		description = "Shrani odgovor",
 		responses = {
 			@ApiResponse(
-				description = "Vprašanje je bilo shranjeno", responseCode = "201",
+				description = "Odgovor je shranjen", responseCode = "201",
 				content = @Content(
 					schema = @Schema(
-						implementation = Vprasanje.class
+						implementation = Odgovor.class
 					)
 				)
 			)
 		}
 	)
 	@POST
-	public Response kreirajNovoVprasanje(NovoVprasanjeZahteva zahteva) {
-		Vprasanje vprasanje = vprasanjeStoritev.shraniVprasanje(zahteva);
-		return Response.status(Response.Status.CREATED).entity(vprasanje).build();
+	public Response shrani(NovOdgovorZahteva zahteva) throws EntitetaNeObstajaException {
+		Odgovor odgovor = odgovorStoritev.shraniOdgovor(zahteva);
+		return Response.status(Response.Status.CREATED).entity(odgovor).build();
 	}
 
 	@Operation(
-		summary = "Posodobi vprašanje",
-		tags = {"vprašanje"},
-		description = "Posodobi vprašanje",
+		summary = "posodobi odgovor",
+		tags = {"odgovor"},
+		description = "Posodobi odgovor",
 		responses = {
 			@ApiResponse(
-				description = "Vprašanje je bilo posodobljeno", responseCode = "200",
+				description = "Odgovor je posodobljen", responseCode = "200",
 				content = @Content(
 					schema = @Schema(
-						implementation = Vprasanje.class
+						implementation = Odgovor.class
 					)
 				)
 			),
@@ -137,18 +135,18 @@ public class VprasanjeVir {
 	)
 	@PUT
 	@Path("{id}")
-	public Response posodobiVprasanje(PosodobiVprasanjeZahteva zahteva, @PathParam("id") long id) throws EntitetaNeObstajaException {
-		Vprasanje vprasanje = vprasanjeStoritev.posodobiVprasanje(zahteva);
-		return Response.status(Response.Status.OK).entity(vprasanje).build();
+	public Response posodobi(NovOdgovorZahteva zahteva, @PathParam("id") long id) throws EntitetaNeObstajaException {
+		Odgovor odgovor = odgovorStoritev.posodobiOdgovor(zahteva, id);
+		return Response.status(Response.Status.OK).entity(odgovor).build();
 	}
 
 	@Operation(
-		summary = "Izbriši vprašanje",
-		tags = {"vprašanje"},
-		description = "Izbriši vprašanje",
+		summary = "izbriše odgovor",
+		tags = {"odgovor"},
+		description = "Izbriši odgovor",
 		responses = {
 			@ApiResponse(
-				description = "Vprašanje je bilo izbrisano", responseCode = "204"
+				description = "Odgovor je izbrisan", responseCode = "204"
 			),
 			@ApiResponse(
 				description = "Napaka - entiteta ne obstaja", responseCode = "404",
@@ -162,9 +160,8 @@ public class VprasanjeVir {
 	)
 	@DELETE
 	@Path("{id}")
-	public Response izbrisiVprasanje(@PathParam("id") long id) throws EntitetaNeObstajaException {
-		vprasanjeStoritev.izbrisiVprasanje(id);
+	public Response izbrisi(@PathParam("id") long id) throws EntitetaNeObstajaException {
+		odgovorStoritev.izbrisiOdgovor(id);
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
-
 }

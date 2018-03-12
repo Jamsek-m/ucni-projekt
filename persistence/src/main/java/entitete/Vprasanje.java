@@ -8,7 +8,8 @@ import java.util.List;
 @Table(name = "vprasanja")
 @NamedQueries({
 	@NamedQuery(name = "Vprasanje.findOne", query = "SELECT v FROM Vprasanje v WHERE v.id = :id"),
-	@NamedQuery(name = "Vprasanje.findAll", query = "SELECT v FROM Vprasanje v")
+	@NamedQuery(name = "Vprasanje.findAll", query = "SELECT v FROM Vprasanje v"),
+	@NamedQuery(name = "Vprasanje.countAll", query = "SELECT COUNT(v.id) FROM Vprasanje v")
 })
 public class Vprasanje implements Serializable {
 	

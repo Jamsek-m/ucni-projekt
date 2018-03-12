@@ -1,6 +1,7 @@
 package entitete;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,7 +9,8 @@ import java.util.Date;
 @Table(name = "odgovori")
 @NamedQueries({
 	@NamedQuery(name = "Odgovor.findOne", query = "SELECT o FROM Odgovor o WHERE o.id = :id"),
-	@NamedQuery(name = "Odgovor.findAll", query = "SELECT o FROM Odgovor o")
+	@NamedQuery(name = "Odgovor.findAll", query = "SELECT o FROM Odgovor o"),
+	@NamedQuery(name = "Odgovor.countAll", query = "SELECT COUNT(o.id) FROM Odgovor o")
 })
 public class Odgovor implements Serializable {
 	
@@ -69,6 +71,7 @@ public class Odgovor implements Serializable {
 		this.odgovor = odgovor;
 	}
 	
+	@XmlTransient
 	public Vprasanje getVprasanje() {
 		return vprasanje;
 	}

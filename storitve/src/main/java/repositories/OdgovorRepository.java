@@ -8,6 +8,7 @@ import napake.EntitetaNeObstajaException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -30,9 +31,13 @@ public class OdgovorRepository {
 		return odgovor;
 	}
 	
+	public long prestejVseZadetke() {
+		Query query = em.createNamedQuery("Odgovor.countAll");
+		return (long) query.getSingleResult();
+	}
+	
 	@Transactional
 	public void shraniOdgovor(Odgovor odgovor) {
-		odgovor.setUstvarjenOb(new Date());
 		em.persist(odgovor);
 	}
 	

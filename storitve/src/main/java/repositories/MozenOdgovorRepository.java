@@ -30,8 +30,14 @@ public class MozenOdgovorRepository {
 		return odgovor;
 	}
 	
+	public long prestejVseZadetke() {
+		Query query = em.createNamedQuery("MozenOdgovor.countAll");
+		return (long) query.getSingleResult();
+	}
+	
 	public List<MozenOdgovor> poisciVseMozneOdgovoreVprasanja(long idVprasanja) {
 		Query query = em.createQuery("SELECT so FROM MozenOdgovor so WHERE so.vprasanje.id = :id");
+		query.setParameter("id", idVprasanja);
 		return query.getResultList();
 	}
 	

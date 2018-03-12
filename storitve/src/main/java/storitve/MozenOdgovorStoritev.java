@@ -32,6 +32,10 @@ public class MozenOdgovorStoritev {
 		return mozenOdgovorRepository.poisciEnOdgovor(id);
 	}
 	
+	public long prestejVseZadetke() {
+		return mozenOdgovorRepository.prestejVseZadetke();
+	}
+	
 	public MozenOdgovor shraniMozenOdgovor(NovMozenOdgovorZahteva req) throws EntitetaNeObstajaException {
 		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.vprasanjeId);
 		MozenOdgovor odgovor = new MozenOdgovor(req.odgovor, vprasanje);

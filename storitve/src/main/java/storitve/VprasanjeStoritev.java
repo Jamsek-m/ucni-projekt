@@ -25,6 +25,10 @@ public class VprasanjeStoritev {
 		return vprasanjeRepository.poisciEnoVprasanje(id);
 	}
 	
+	public long prestejVseZadetke() {
+		return vprasanjeRepository.vrniSteviloVsehZadetkov();
+	}
+	
 	public Vprasanje shraniVprasanje(NovoVprasanjeZahteva req) {
 		Vprasanje vprasanje = new Vprasanje(req.vprasanje);
 		vprasanjeRepository.shraniVprasanje(vprasanje);
