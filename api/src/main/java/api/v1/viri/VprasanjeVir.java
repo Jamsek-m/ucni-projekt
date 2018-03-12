@@ -4,8 +4,8 @@ import com.kumuluz.ee.rest.beans.QueryParameters;
 import entitete.Vprasanje;
 import napake.EntitetaNeObstajaException;
 import storitve.VprasanjeStoritev;
-import zahteve.NovoVprasanjeZahteva;
-import zahteve.PosodobiVprasanjeZahteva;
+import zahteve.vprasanje.NovoVprasanjeZahteva;
+import zahteve.vprasanje.PosodobiVprasanjeZahteva;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

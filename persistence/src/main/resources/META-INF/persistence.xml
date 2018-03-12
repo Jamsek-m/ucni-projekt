@@ -5,7 +5,7 @@
         <jta-data-source>jdbc/baza</jta-data-source>
 
         <class>entitete.Vprasanje</class>
-        <class>entitete.SeznamOdgovorov</class>
+        <class>entitete.MozenOdgovor</class>
         <class>entitete.Odgovor</class>
 
         <properties>

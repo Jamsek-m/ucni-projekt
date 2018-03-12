@@ -4,26 +4,27 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "seznam_odgovorov")
+@Table(name = "mozen_odgovor")
 @NamedQueries({
-	@NamedQuery(name = "SeznamOdgovorov.findOne", query = "SELECT so FROM SeznamOdgovorov so WHERE so.id = :id"),
-	@NamedQuery(name = "SeznamOdgovorov.findAll", query = "SELECT so FROM SeznamOdgovorov so")
+	@NamedQuery(name = "SeznamOdgovorov.findOne", query = "SELECT so FROM MozenOdgovor so WHERE so.id = :id"),
+	@NamedQuery(name = "SeznamOdgovorov.findAll", query = "SELECT so FROM MozenOdgovor so")
 })
-public class SeznamOdgovorov implements Serializable {
+public class MozenOdgovor implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	@Column(name = "tip_odgovora")
 	private String tipOdgovora;
 	
 	@ManyToOne
 	@JoinColumn(name = "vprasanje_id")
 	private Vprasanje vprasanje;
 	
-	public SeznamOdgovorov() {}
+	public MozenOdgovor() {}
 	
-	public SeznamOdgovorov(String tipOdgovora, Vprasanje vprasanje) {
+	public MozenOdgovor(String tipOdgovora, Vprasanje vprasanje) {
 		this.tipOdgovora = tipOdgovora;
 		this.vprasanje = vprasanje;
 	}

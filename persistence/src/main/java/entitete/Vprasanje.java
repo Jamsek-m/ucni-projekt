@@ -19,7 +19,7 @@ public class Vprasanje implements Serializable {
 	private String vprasanje;
 	
 	@OneToMany(mappedBy = "vprasanje")
-	private List<SeznamOdgovorov> seznamMoznihOdgovorov;
+	private List<MozenOdgovor> seznamMoznihOdgovorov;
 	
 	@OneToMany(mappedBy = "vprasanje")
 	private List<Odgovor> odgovori;
@@ -46,11 +46,11 @@ public class Vprasanje implements Serializable {
 		this.vprasanje = vprasanje;
 	}
 	
-	public List<SeznamOdgovorov> getSeznamMoznihOdgovorov() {
+	public List<MozenOdgovor> getSeznamMoznihOdgovorov() {
 		return seznamMoznihOdgovorov;
 	}
 	
-	public void setSeznamMoznihOdgovorov(List<SeznamOdgovorov> seznamMoznihOdgovorov) {
+	public void setSeznamMoznihOdgovorov(List<MozenOdgovor> seznamMoznihOdgovorov) {
 		this.seznamMoznihOdgovorov = seznamMoznihOdgovorov;
 	}
 	

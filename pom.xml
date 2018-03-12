@@ -15,9 +15,11 @@
     </modules>
 
     <properties>
+        <java.version>9</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kumuluzee.version>3.0.0-beta.1</kumuluzee.version>
         <postgres.version>42.2.1</postgres.version>
-        <kumuluzee-rest.version>1.1.0</kumuluzee-rest.version>
+        <kumuluzee-rest.version>1.2.0</kumuluzee-rest.version>
     </properties>
 
     <dependencyManagement>
@@ -51,9 +53,21 @@
                 <artifactId>kumuluzee-rest-core</artifactId>
                 <version>${kumuluzee-rest.version}</version>
             </dependency>
-
-
         </dependencies>
     </dependencyManagement>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
