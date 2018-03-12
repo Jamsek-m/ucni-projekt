@@ -1,0 +1,11 @@
+kumuluzee:
+  name: ucni-projekt
+  version: 1.0.0
+  env:
+    name: dev
+  datasources:
+    - jndi-name: jdbc/baza
+    connection-url: jdbc:postgresql://localhost:5432/ucni_projekt
+    username: postgres
+    password: postgres
+    max-pool-size: 20
