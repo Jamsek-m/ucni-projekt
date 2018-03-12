@@ -13,7 +13,7 @@ public class MozenOdgovor implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 	
 	@Column(name = "tip_odgovora")
 	private String tipOdgovora;
@@ -29,11 +29,11 @@ public class MozenOdgovor implements Serializable {
 		this.vprasanje = vprasanje;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	

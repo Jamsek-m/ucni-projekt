@@ -19,6 +19,9 @@ public class Odgovor implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date ustvarjenOb;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date posodobljenOb;
+	
 	private String odgovor;
 	
 	@ManyToOne
@@ -27,8 +30,9 @@ public class Odgovor implements Serializable {
 	
 	public Odgovor() {}
 	
-	public Odgovor(Date ustvarjenOb, String odgovor, Vprasanje vprasanje) {
+	public Odgovor(Date ustvarjenOb, Date posodobljenOb, String odgovor, Vprasanje vprasanje) {
 		this.ustvarjenOb = ustvarjenOb;
+		this.posodobljenOb = posodobljenOb;
 		this.odgovor = odgovor;
 		this.vprasanje = vprasanje;
 	}
@@ -47,6 +51,14 @@ public class Odgovor implements Serializable {
 	
 	public void setUstvarjenOb(Date ustvarjenOb) {
 		this.ustvarjenOb = ustvarjenOb;
+	}
+	
+	public Date getPosodobljenOb() {
+		return posodobljenOb;
+	}
+	
+	public void setPosodobljenOb(Date posodobljenOb) {
+		this.posodobljenOb = posodobljenOb;
 	}
 	
 	public String getOdgovor() {
