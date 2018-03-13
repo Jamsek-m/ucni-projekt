@@ -15,6 +15,17 @@ kumuluzee:
       hosts: http://localhost:2379
     ttl: 20
     ping-interval: 15
+  health:
+    servlet:
+      mapping: /health
+      enabled: true
+    checks:
+      data-source-health-check:
+        jndi-name: jdbc/baza
+      disk-space-health-check:
+        threshold: 100000000
+      etcd-health-check:
+        connection-url: http://localhost:2379/health
   datasources:
     - jndi-name: jdbc/baza
       connection-url: jdbc:postgresql://localhost:5432/ucni_projekt
