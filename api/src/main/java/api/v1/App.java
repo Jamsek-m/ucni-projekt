@@ -9,8 +9,8 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 @OpenAPIDefinition(
-		info = @Info(title = "VprasanjaApi", version = "v1.0"),
-		servers = @Server(url = "http://localhost:8080/v1")
+	info = @Info(title = "VprasanjaApi", version = "v1.0"),
+	servers = @Server(url = "http://localhost:8080/v1")
 )
 @RegisterService(
     value = "vprasanja-service", ttl = 20, pingInterval = 15,

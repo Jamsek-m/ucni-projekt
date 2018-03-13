@@ -10,6 +10,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import napake.EntitetaNeObstajaException;
 import napake.SlabaZahtevaException;
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Metric;
 import responses.vprasanje.FindAllResponse;
 import storitve.VprasanjeStoritev;
 import zahteve.vprasanje.NovoVprasanjeZahteva;
@@ -35,6 +39,10 @@ public class VprasanjeVir {
 	
 	@Context
 	private UriInfo uriInfo;
+
+    @Inject
+    @Metric(name = "stevec_prikazanih_vprasanj")
+    private Counter stevecPrikazanihVprasanj;
 
 	@Operation(
 		summary = "Pridobi seznam vprašanj",
@@ -87,8 +95,10 @@ public class VprasanjeVir {
 	)
 	@GET
 	@Path("{id}")
+    @Metered(name = "stevec_zahtev_na_uro_vprasanj")
 	public Response vrniEnoVprasanje(@PathParam("id") long id) throws EntitetaNeObstajaException {
 		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(id);
+		stevecPrikazanihVprasanj.inc();
 		return Response.status(Response.Status.OK).entity(vprasanje).build();
 	}
 

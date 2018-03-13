@@ -19,8 +19,10 @@ public class Odgovor implements Serializable {
 	private long id;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "ustvarjen_ob")
 	private Date ustvarjenOb;
-	
+
+	@Column(name = "posodobljen_ob")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date posodobljenOb;
 	

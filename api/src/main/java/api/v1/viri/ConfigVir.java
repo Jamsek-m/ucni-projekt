@@ -1,20 +1,19 @@
 package api.v1.viri;
 
 import api.v1.config.RestConfigProps;
-import com.kumuluz.ee.discovery.annotations.DiscoverService;
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.Histogram;
+import org.eclipse.microprofile.metrics.Meter;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.metrics.annotation.Metric;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URL;
 
 
 @ApplicationScoped
@@ -27,29 +26,39 @@ public class ConfigVir {
     private RestConfigProps restConfigProps;
 
     @Inject
-    @DiscoverService(value = "vprasanja-service", environment = "dev", version = "1.0.0")
-    private String url;
+    @Metric(name = "config_counter")
+    private Counter stevec;
+
+    @Inject
+    @Metric(name = "avg_param_length")
+    private Histogram histogram;
+
+    @Inject
+    @Metric(name = "add_meter")
+    private Meter addMeter;
+
 
     @GET
+    @Timed(name = "config_read_timer")
     public Response get() {
+        getCount();
         String s = String.format("1: %s, 2: %d\n", restConfigProps.getStringProperty(), restConfigProps.getIntegerProperty());
         return Response.status(Response.Status.OK).entity(s).build();
     }
 
     @GET
-    @Path("serv")
-    public Response getServ() {
-        System.err.println("Tuki sm");
-        Client client = ClientBuilder.newClient();
-        WebTarget base = client.target(url);
-        WebTarget vprasanja = base.path("/v1/vprasanja");
+    @Path("metrike/{param}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response spremeniMetrike(@PathParam("param") String param) {
+        stevec.inc();
+        addMeter.mark();
+        histogram.update(param.length());
+        return Response.status(Response.Status.OK).entity(param).build();
+    }
 
-        System.err.println("POT: " + vprasanja.getUri().toString());
-
-        Response odgovor = vprasanja.request().get();
-        Object resp = odgovor.getEntity();
-
-        return Response.status(Response.Status.OK).entity(resp).build();
+    @Gauge(name = "customer_count", unit = MetricUnits.NONE)
+    private long getCount() {
+        return 10;
     }
 
 

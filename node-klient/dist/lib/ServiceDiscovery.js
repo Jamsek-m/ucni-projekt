@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// from: https://www.npmjs.com/package/nodejs-etcd
 const Etcd = require("nodejs-etcd");
 const path = require("path");
 class ServiceDiscovery {

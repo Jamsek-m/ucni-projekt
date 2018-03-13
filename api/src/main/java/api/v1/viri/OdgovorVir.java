@@ -10,6 +10,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import napake.EntitetaNeObstajaException;
 import napake.SlabaZahtevaException;
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Metric;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import responses.vprasanje.FindAllResponse;
 import storitve.OdgovorStoritev;
 import zahteve.odgovor.NovOdgovorZahteva;
@@ -34,6 +39,10 @@ public class OdgovorVir {
 	
 	@Context
 	private UriInfo uriInfo;
+
+	@Inject
+    @Metric(name = "stevilo_shranjenih_odgovorov")
+    private Counter steviloShranjenihOdgovorov;
 	
 	@Operation(
 		summary = "Pridobi seznam odgovorov",
@@ -90,6 +99,29 @@ public class OdgovorVir {
 		return Response.status(Response.Status.OK).entity(odgovor).build();
 	}
 
+    @Operation(
+        summary = "Pridobi seznam odgovorov podanega vprašanja",
+        tags = {"odgovor"},
+        description = "Vrne vse odgovore na vprašanje z podanim id-jem",
+        responses = {
+            @ApiResponse(
+                description = "Seznam odgovorov vprašanja z podanim id-jem", responseCode = "200",
+                content = @Content(
+                    schema = @Schema(
+                        implementation = Odgovor.class
+                    )
+                ),
+                headers = {@Header(name = "Seznam odgovorov", schema = @Schema(type = "List<Odgovor>"))}
+            )
+        }
+    )
+	@GET
+	@Path("vprasanje/{id}")
+	public Response vrniOdgovoreVprasanja(@PathParam("id") long id) {
+        List<Odgovor> seznam = odgovorStoritev.vrniVseOdgovoreVprasanja(id);
+        return Response.status(Response.Status.OK).entity(seznam).build();
+	}
+
 	@Operation(
 		summary = "shrani odgovor",
 		tags = {"odgovor"},
@@ -106,11 +138,14 @@ public class OdgovorVir {
 		}
 	)
 	@POST
+    @Metered(name = "stevilo_odgovorov_na_uro")
+    @Timed(name = "cas_belezenja_odgovora", unit = MetricUnits.SECONDS)
 	public Response shrani(NovOdgovorZahteva zahteva) throws EntitetaNeObstajaException, SlabaZahtevaException {
 		if(zahteva.idVprasanja == 0 || zahteva.odgovor == 0) {
 			throw new SlabaZahtevaException();
 		}
 		Odgovor odgovor = odgovorStoritev.shraniOdgovor(zahteva);
+		steviloShranjenihOdgovorov.inc();
 		return Response.status(Response.Status.CREATED).entity(odgovor).build();
 	}
 
@@ -170,6 +205,7 @@ public class OdgovorVir {
 	@Path("{id}")
 	public Response izbrisi(@PathParam("id") long id) throws EntitetaNeObstajaException {
 		odgovorStoritev.izbrisiOdgovor(id);
+		steviloShranjenihOdgovorov.dec();
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 }

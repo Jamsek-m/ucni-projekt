@@ -35,6 +35,12 @@ public class OdgovorRepository {
 		Query query = em.createNamedQuery("Odgovor.countAll");
 		return (long) query.getSingleResult();
 	}
+
+	public List<Odgovor> pridobiOdgovoreVprasanja(long idVprasanja) {
+		Query query = em.createQuery("SELECT o FROM Odgovor o WHERE o.vprasanje.id = :id");
+		query.setParameter("id", idVprasanja);
+		return query.getResultList();
+	}
 	
 	@Transactional
 	public void shraniOdgovor(Odgovor odgovor) {

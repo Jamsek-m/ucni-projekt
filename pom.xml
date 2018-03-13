@@ -15,10 +15,12 @@
     </modules>
 
     <properties>
+        <!-- project properties -->
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- dependency versions -->
         <kumuluzee.version>2.6.0-SNAPSHOT</kumuluzee.version>
         <postgres.version>42.2.1</postgres.version>
         <kumuluzee-rest.version>1.2.0</kumuluzee-rest.version>
@@ -28,6 +30,7 @@
         <kumuluzee-config-etcd.version>1.1.0</kumuluzee-config-etcd.version>
         <kumuluzee-discovery-etcd.version>1.1.0</kumuluzee-discovery-etcd.version>
         <kumuluzee-health.version>1.0.0</kumuluzee-health.version>
+        <kumuluzee-metrics.version>1.0.0</kumuluzee-metrics.version>
     </properties>
 
     <dependencyManagement>
@@ -56,11 +59,26 @@
                 <artifactId>storitve</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- other -->
+            <!-- KumuluzEE extensions -->
             <dependency>
                 <groupId>com.kumuluz.ee.rest</groupId>
                 <artifactId>kumuluzee-rest-core</artifactId>
                 <version>${kumuluzee-rest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.openapi</groupId>
+                <artifactId>kumuluzee-openapi</artifactId>
+                <version>${kumuluzee-openapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.openapi</groupId>
+                <artifactId>kumuluzee-openapi-ui</artifactId>
+                <version>${kumuluzee-openapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.cors</groupId>
+                <artifactId>kumuluzee-cors</artifactId>
+                <version>${kumuluzee-cors.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.kumuluz.ee.config</groupId>
@@ -77,6 +95,17 @@
                 <artifactId>kumuluzee-health</artifactId>
                 <version>${kumuluzee-health.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.metrics</groupId>
+                <artifactId>kumuluzee-metrics-core</artifactId>
+                <version>${kumuluzee-metrics.version}</version>
+            </dependency>
+            <!-- external -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -87,25 +116,6 @@
             <version>${kumuluzee-logs.version}</version>
         </dependency>
     </dependencies>
-
-
-    <!--
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    -->
 
     <repositories>
         <repository>

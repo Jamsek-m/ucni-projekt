@@ -30,7 +30,11 @@ public class OdgovorStoritev {
 	public List<Odgovor> vrniVseOdgovore(QueryParameters query) {
 		return odgovorRepository.poisciVseOdgovore(query);
 	}
-	
+
+	public List<Odgovor> vrniVseOdgovoreVprasanja(long idVprasanja) {
+		return odgovorRepository.pridobiOdgovoreVprasanja(idVprasanja);
+	}
+
 	public Odgovor vrniEnOdgovor(long id) throws EntitetaNeObstajaException {
 		return odgovorRepository.poisciEnOdgovor(id);
 	}

@@ -31,32 +31,30 @@
         <dependency>
             <groupId>com.kumuluz.ee.openapi</groupId>
             <artifactId>kumuluzee-openapi</artifactId>
-            <version>${kumuluzee-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>com.kumuluz.ee.openapi</groupId>
             <artifactId>kumuluzee-openapi-ui</artifactId>
-            <version>${kumuluzee-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>com.kumuluz.ee.cors</groupId>
             <artifactId>kumuluzee-cors</artifactId>
-            <version>${kumuluzee-cors.version}</version>
         </dependency>
         <dependency>
             <groupId>com.kumuluz.ee.config</groupId>
             <artifactId>kumuluzee-config-etcd</artifactId>
-            <version>${kumuluzee-config-etcd.version}</version>
         </dependency>
         <dependency>
             <groupId>com.kumuluz.ee.discovery</groupId>
             <artifactId>kumuluzee-discovery-etcd</artifactId>
-            <version>${kumuluzee-discovery-etcd.version}</version>
         </dependency>
         <dependency>
             <groupId>com.kumuluz.ee.health</groupId>
             <artifactId>kumuluzee-health</artifactId>
-            <version>${kumuluzee-health.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kumuluz.ee.metrics</groupId>
+            <artifactId>kumuluzee-metrics-core</artifactId>
         </dependency>
     </dependencies>
 
