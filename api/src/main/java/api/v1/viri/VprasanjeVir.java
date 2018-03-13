@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import napake.EntitetaNeObstajaException;
+import napake.SlabaZahtevaException;
 import responses.vprasanje.FindAllResponse;
 import storitve.VprasanjeStoritev;
 import zahteve.vprasanje.NovoVprasanjeZahteva;
@@ -107,7 +108,10 @@ public class VprasanjeVir {
 		}
 	)
 	@POST
-	public Response kreirajNovoVprasanje(NovoVprasanjeZahteva zahteva) {
+	public Response kreirajNovoVprasanje(NovoVprasanjeZahteva zahteva) throws SlabaZahtevaException {
+		if(zahteva.vprasanje.isEmpty()) {
+			throw new SlabaZahtevaException();
+		}
 		Vprasanje vprasanje = vprasanjeStoritev.shraniVprasanje(zahteva);
 		return Response.status(Response.Status.CREATED).entity(vprasanje).build();
 	}
@@ -137,9 +141,13 @@ public class VprasanjeVir {
 	)
 	@PUT
 	@Path("{id}")
-	public Response posodobiVprasanje(PosodobiVprasanjeZahteva zahteva, @PathParam("id") long id) throws EntitetaNeObstajaException {
-		Vprasanje vprasanje = vprasanjeStoritev.posodobiVprasanje(zahteva);
-		return Response.status(Response.Status.OK).entity(vprasanje).build();
+	public Response posodobiVprasanje(PosodobiVprasanjeZahteva zahteva, @PathParam("id") long id)
+		throws EntitetaNeObstajaException, SlabaZahtevaException {
+			if(zahteva.vprasanje.isEmpty() || zahteva.id == 0) {
+				throw new SlabaZahtevaException();
+			}
+			Vprasanje vprasanje = vprasanjeStoritev.posodobiVprasanje(zahteva);
+			return Response.status(Response.Status.OK).entity(vprasanje).build();
 	}
 
 	@Operation(

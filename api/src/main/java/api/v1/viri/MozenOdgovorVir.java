@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import napake.EntitetaNeObstajaException;
+import napake.SlabaZahtevaException;
 import responses.vprasanje.FindAllResponse;
 import storitve.MozenOdgovorStoritev;
 import zahteve.mozenodgovor.NovMozenOdgovorZahteva;
@@ -136,9 +137,13 @@ public class MozenOdgovorVir {
         }
     )
 	@POST
-	public Response kreirajNovega(NovMozenOdgovorZahteva zahteva) throws EntitetaNeObstajaException {
-		MozenOdgovor odgovor = mozenOdgovorStoritev.shraniMozenOdgovor(zahteva);
-		return Response.status(Response.Status.CREATED).entity(odgovor).build();
+	public Response kreirajNovega(NovMozenOdgovorZahteva zahteva)
+		throws EntitetaNeObstajaException, SlabaZahtevaException {
+			if(zahteva.odgovor.isEmpty() || zahteva.vprasanjeId == 0) {
+				throw new SlabaZahtevaException();
+			}
+			MozenOdgovor odgovor = mozenOdgovorStoritev.shraniMozenOdgovor(zahteva);
+			return Response.status(Response.Status.CREATED).entity(odgovor).build();
 	}
 
     @Operation(
@@ -166,9 +171,13 @@ public class MozenOdgovorVir {
     )
 	@PUT
 	@Path("{id}")
-	public Response posodobi(NovMozenOdgovorZahteva zahteva, @PathParam("id") long id) throws EntitetaNeObstajaException {
-		MozenOdgovor odgovor = mozenOdgovorStoritev.posodobiMozenOdgovor(zahteva, id);
-		return Response.status(Response.Status.OK).entity(odgovor).build();
+	public Response posodobi(NovMozenOdgovorZahteva zahteva, @PathParam("id") long id)
+		throws EntitetaNeObstajaException, SlabaZahtevaException {
+			if(zahteva.odgovor.isEmpty() || zahteva.vprasanjeId == 0) {
+				throw new SlabaZahtevaException();
+			}
+			MozenOdgovor odgovor = mozenOdgovorStoritev.posodobiMozenOdgovor(zahteva, id);
+			return Response.status(Response.Status.OK).entity(odgovor).build();
 	}
 
     @Operation(

@@ -16,7 +16,11 @@ public class FindAllResponse<T> {
 		if(query.getOffset() != null && query.getLimit() != null) {
 			long limit = query.getLimit();
 			long offset = query.getOffset();
-			this.glava = new GlavaZPaginacijo(steviloVsehZadetkov, offset, limit);
+			if(limit == 0) {
+				this.glava = new GlavaBrezPaginacije(steviloVsehZadetkov);
+			} else {
+				this.glava = new GlavaZPaginacijo(steviloVsehZadetkov, limit, offset);
+			}
 		} else {
 			this.glava = new GlavaBrezPaginacije(steviloVsehZadetkov);
 		}

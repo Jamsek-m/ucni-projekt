@@ -2,10 +2,13 @@ package repositories;
 
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.kumuluz.ee.rest.utils.JPAUtils;
+import entitete.MozenOdgovor;
+import entitete.Odgovor;
 import entitete.Vprasanje;
 import napake.EntitetaNeObstajaException;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -17,6 +20,12 @@ public class VprasanjeRepository {
 	
 	@PersistenceContext(unitName = "baza-jpa-unit")
 	private EntityManager em;
+
+	@Inject
+	private MozenOdgovorRepository mozenOdgovorRepository;
+
+	@Inject
+	private OdgovorRepository odgovorRepository;
 	
 	public List<Vprasanje> poisciVsaVprasanja(QueryParameters query) {
 		return JPAUtils.queryEntities(em, Vprasanje.class, query);
@@ -44,6 +53,12 @@ public class VprasanjeRepository {
 	public void izbrisiVprasanje(long vprasanjeId) throws EntitetaNeObstajaException {
 		Vprasanje vprasanje = em.find(Vprasanje.class, vprasanjeId);
 		if(vprasanje != null) {
+			for(MozenOdgovor odg : vprasanje.getSeznamMoznihOdgovorov()) {
+				mozenOdgovorRepository.izbrisiMozenOdgovor(odg.getId());
+			}
+			for(Odgovor odg : vprasanje.getOdgovori()) {
+				odgovorRepository.izbrisiOdgovor(odg.getId());
+			}
 			em.remove(vprasanje);
 		} else {
 			throw new EntitetaNeObstajaException();

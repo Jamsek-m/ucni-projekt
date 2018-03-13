@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import napake.EntitetaNeObstajaException;
+import napake.SlabaZahtevaException;
 import responses.vprasanje.FindAllResponse;
 import storitve.OdgovorStoritev;
 import zahteve.odgovor.NovOdgovorZahteva;
@@ -105,7 +106,10 @@ public class OdgovorVir {
 		}
 	)
 	@POST
-	public Response shrani(NovOdgovorZahteva zahteva) throws EntitetaNeObstajaException {
+	public Response shrani(NovOdgovorZahteva zahteva) throws EntitetaNeObstajaException, SlabaZahtevaException {
+		if(zahteva.idVprasanja == 0 || zahteva.odgovor == 0) {
+			throw new SlabaZahtevaException();
+		}
 		Odgovor odgovor = odgovorStoritev.shraniOdgovor(zahteva);
 		return Response.status(Response.Status.CREATED).entity(odgovor).build();
 	}
@@ -135,9 +139,13 @@ public class OdgovorVir {
 	)
 	@PUT
 	@Path("{id}")
-	public Response posodobi(NovOdgovorZahteva zahteva, @PathParam("id") long id) throws EntitetaNeObstajaException {
-		Odgovor odgovor = odgovorStoritev.posodobiOdgovor(zahteva, id);
-		return Response.status(Response.Status.OK).entity(odgovor).build();
+	public Response posodobi(NovOdgovorZahteva zahteva, @PathParam("id") long id)
+		throws EntitetaNeObstajaException, SlabaZahtevaException {
+			if(zahteva.idVprasanja == 0 || zahteva.odgovor == 0) {
+				throw new SlabaZahtevaException();
+			}
+			Odgovor odgovor = odgovorStoritev.posodobiOdgovor(zahteva, id);
+			return Response.status(Response.Status.OK).entity(odgovor).build();
 	}
 
 	@Operation(

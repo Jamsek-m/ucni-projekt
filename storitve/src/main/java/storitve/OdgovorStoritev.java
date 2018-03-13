@@ -1,9 +1,11 @@
 package storitve;
 
 import com.kumuluz.ee.rest.beans.QueryParameters;
+import entitete.MozenOdgovor;
 import entitete.Odgovor;
 import entitete.Vprasanje;
 import napake.EntitetaNeObstajaException;
+import repositories.MozenOdgovorRepository;
 import repositories.OdgovorRepository;
 import repositories.VprasanjeRepository;
 import zahteve.odgovor.NovOdgovorZahteva;
@@ -18,6 +20,9 @@ public class OdgovorStoritev {
 	
 	@Inject
 	private OdgovorRepository odgovorRepository;
+
+	@Inject
+	private MozenOdgovorRepository mozenOdgovorRepository;
 	
 	@Inject
 	private VprasanjeRepository vprasanjeRepository;
@@ -39,7 +44,10 @@ public class OdgovorStoritev {
 		Date datum = new Date();
 		odgovor.setUstvarjenOb(datum);
 		odgovor.setPosodobljenOb(datum);
-		odgovor.setOdgovor(String.valueOf(req.odgovor));
+
+		MozenOdgovor mozenOdgovor = mozenOdgovorRepository.poisciEnOdgovor(req.odgovor);
+		odgovor.setOdgovor(mozenOdgovor.getTipOdgovora());
+
 		Vprasanje vprasanje = vprasanjeRepository.poisciEnoVprasanje(req.idVprasanja);
 		odgovor.setVprasanje(vprasanje);
 		
@@ -50,7 +58,10 @@ public class OdgovorStoritev {
 	public Odgovor posodobiOdgovor(NovOdgovorZahteva req, long id) throws EntitetaNeObstajaException {
 		Odgovor odgovor = odgovorRepository.poisciEnOdgovor(id);
 		odgovor.setPosodobljenOb(new Date());
-		odgovor.setOdgovor(String.valueOf(req.odgovor));
+
+		MozenOdgovor mozenOdgovor = mozenOdgovorRepository.poisciEnOdgovor(req.odgovor);
+		odgovor.setOdgovor(mozenOdgovor.getTipOdgovora());
+
 		Vprasanje vprasanje = vprasanjeRepository.poisciEnoVprasanje(req.idVprasanja);
 		odgovor.setVprasanje(vprasanje);
 		
