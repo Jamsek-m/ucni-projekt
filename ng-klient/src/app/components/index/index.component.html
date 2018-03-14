@@ -1,0 +1,8 @@
+
+
+<p>{{vprasanje.vprasanje}}</p>
+
+<div *ngFor="let item of vprasanje.seznamMoznihOdgovorov">
+    <button (click)="shraniOdgovor(item.id)">{{item.tipOdgovora}}</button>
+</div>
+
