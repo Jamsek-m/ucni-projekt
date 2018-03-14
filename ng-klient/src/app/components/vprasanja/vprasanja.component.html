@@ -1,0 +1,24 @@
+
+<h2>Seznam vprašanj</h2>
+
+<div class="prikazi-elementov">
+    <a [routerLink]="" [ngClass]="{'izbrani-limit': limit === 5}" (click)="nastaviLimit(5)">5</a> |
+    <a [routerLink]="" [ngClass]="{'izbrani-limit': limit === 20}" (click)="nastaviLimit(20)">20</a> |
+    <a [routerLink]="" [ngClass]="{'izbrani-limit': limit === 50}" (click)="nastaviLimit(50)">50</a>
+</div>
+<div class="vprasanja">
+
+    <ul>
+        <li *ngFor="let item of seznamVprasanj">
+            <a [routerLink]="" (click)="izberiVprasanje(item.id)">{{item.vprasanje}}</a>
+        </li>
+    </ul>
+    <div class="navigacija-strani" *ngIf="seznamVsehStrani.length > 1">
+        <span *ngFor="let stran of seznamVsehStrani">
+            <a [routerLink]="" (click)="pojdiNaStran(stran)" class="stran-povezava">{{stran}}</a>
+            <span *ngIf="stran != seznamVsehStrani.length">-</span>
+        </span>
+    </div>
+
+
+</div>

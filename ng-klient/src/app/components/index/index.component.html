@@ -1,8 +1,14 @@
+<h2>Dnevno vprašanje</h2>
 
+<div class="vprasanje" *ngIf="!odgovorZabelezen">
+    <p>{{vprasanje.vprasanje}}</p>
 
-<p>{{vprasanje.vprasanje}}</p>
-
-<div *ngFor="let item of vprasanje.seznamMoznihOdgovorov">
-    <button (click)="shraniOdgovor(item.id)">{{item.tipOdgovora}}</button>
+    <div class="odgovori">
+        <span *ngFor="let item of vprasanje.seznamMoznihOdgovorov" class="odgovor">
+            <button (click)="shraniOdgovor(item.id)">{{item.tipOdgovora}}</button>
+        </span>
+    </div>
 </div>
-
+<div class="odgovor-zabelezen" *ngIf="odgovorZabelezen">
+    odgovor je bil zabeležen!
+</div>

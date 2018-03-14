@@ -1,0 +1,8 @@
+
+<h2>Odgovori na vprašanje</h2>
+
+<h4>Vprašanje: {{vprasanje.vprasanje}}</h4>
+
+<div class="odgovori" *ngFor="let odg of seznamOdgovorov">
+    {{odg.posodobljenOb | date: 'dd.MM.yyyy HH:mm:ss'}}&#160;&#160;&#160;&#160;{{odg.odgovor}}
+</div>

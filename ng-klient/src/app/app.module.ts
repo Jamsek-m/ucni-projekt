@@ -9,12 +9,17 @@ import {AppRoutingModule} from "./app-routing.module";
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {OdgovorStoritev} from "./storitve/odgovor.storitev";
+import {VprasanjaComponent} from "./components/vprasanja/vprasanja.component";
+import {StorageStoritev} from "./storitve/storage.storitev";
+import {StatistikaComponent} from "./components/vprasanja/statistika/statistika.component";
 
 
 @NgModule({
     declarations: [
         AppComponent,
-        IndexComponent
+        IndexComponent,
+        VprasanjaComponent,
+        StatistikaComponent
     ],
     imports: [
         BrowserModule,
@@ -22,7 +27,11 @@ import {OdgovorStoritev} from "./storitve/odgovor.storitev";
         AppRoutingModule,
         FormsModule
     ],
-    providers: [VprasanjaStoritev, OdgovorStoritev],
+    providers: [
+        VprasanjaStoritev,
+        OdgovorStoritev,
+        StorageStoritev
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

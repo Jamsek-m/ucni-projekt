@@ -6,10 +6,12 @@ import {OdgovorStoritev} from "../../storitve/odgovor.storitev";
 @Component({
     selector: "app-index-page",
     moduleId: module.id,
-    templateUrl: "index.component.html"
+    templateUrl: "index.component.html",
+    styleUrls: ["index.component.css"]
 })
 export class IndexComponent implements OnInit {
     vprasanje: Vprasanje;
+    odgovorZabelezen: boolean;
 
     constructor(private vprasanja: VprasanjaStoritev, private odgovori: OdgovorStoritev) {
         this.vprasanje = new Vprasanje();
@@ -17,6 +19,7 @@ export class IndexComponent implements OnInit {
 
     ngOnInit(): void {
         this.pridobiVprasanje();
+        this.odgovorZabelezen = false;
     }
 
     pridobiVprasanje() {
@@ -34,6 +37,7 @@ export class IndexComponent implements OnInit {
         this.odgovori.shraniOdgovorNaVprasanje(this.vprasanje.id, idOdgovora)
             .then(
                 (odgovor) => {
+                    this.odgovorZabelezen = true;
                     console.log("Odgovor zabeležen: ", odgovor);
                 },
                 (err) => {

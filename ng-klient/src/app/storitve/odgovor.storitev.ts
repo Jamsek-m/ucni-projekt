@@ -23,6 +23,13 @@ export class OdgovorStoritev {
             .then(res => res as Odgovor);
     }
 
+    public poisciOdgovoreVprasanja(idVprasanja: number): Promise<any> {
+        const url = `${this.URL}/vprasanje/${idVprasanja}`;
+        return this.http.get(url, {headers: this.headers})
+            .toPromise()
+            .then(res => res as Odgovor[]);
+    }
+
 
 
 
