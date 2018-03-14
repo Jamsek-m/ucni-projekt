@@ -103,6 +103,29 @@ public class VprasanjeVir {
 	}
 
 	@Operation(
+		summary = "Pridobi naključno vprašanje",
+		tags = {"vprašanje"},
+		description = "Vrne naključno vprašanje",
+		responses = {
+			@ApiResponse(
+				description = "Naključno vprašanje", responseCode = "200",
+				content = @Content(
+					schema = @Schema(
+						implementation = Vprasanje.class
+					)
+				)
+			)
+		}
+	)
+	@GET
+	@Path("random")
+	@Metered(name = "stevilo_prikazanih_vprasanja_na_uro")
+	public Response vrniNakljucnoVprasanje() {
+		Vprasanje vprasanje = vprasanjeStoritev.vrniNakljucnoVprasanje();
+		return Response.status(Response.Status.OK).entity(vprasanje).build();
+	}
+
+	@Operation(
 		summary = "Shrani vprašanje",
 		tags = {"vprašanje"},
 		description = "Shrani vprašanje",

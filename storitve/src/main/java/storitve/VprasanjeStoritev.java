@@ -24,6 +24,10 @@ public class VprasanjeStoritev {
 	public Vprasanje vrniEnoVprasanje(long id) throws EntitetaNeObstajaException {
 		return vprasanjeRepository.poisciEnoVprasanje(id);
 	}
+
+	public Vprasanje vrniNakljucnoVprasanje() {
+		return vprasanjeRepository.vrniEnoNakljucnoVprasanje();
+	}
 	
 	public long prestejVseZadetke() {
 		return vprasanjeRepository.vrniSteviloVsehZadetkov();

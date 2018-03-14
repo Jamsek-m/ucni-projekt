@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Random;
 
 @ApplicationScoped
 public class VprasanjeRepository {
@@ -38,6 +39,20 @@ public class VprasanjeRepository {
 		}
 		return vprasanje;
 	}
+
+	public Vprasanje vrniEnoNakljucnoVprasanje() {
+	    Query countQuery = em.createQuery("SELECT COUNT(v.id) FROM Vprasanje v");
+	    long count = (long) countQuery.getSingleResult();
+
+        Random random = new Random();
+        int prviRez = random.nextInt((int) count);
+
+        Query query = em.createQuery("SELECT v FROM Vprasanje v");
+        query.setFirstResult(prviRez);
+        query.setMaxResults(1);
+
+        return (Vprasanje) query.getSingleResult();
+    }
 	
 	public long vrniSteviloVsehZadetkov() {
 		Query query = em.createNamedQuery("Vprasanje.countAll");
