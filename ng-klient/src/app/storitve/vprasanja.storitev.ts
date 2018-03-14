@@ -6,6 +6,7 @@ import {VprasanjeResponse} from "../models/response/VprasanjeResponse";
 @Injectable()
 export class VprasanjaStoritev {
     private URL = "http://localhost:8080/v1/vprasanja";
+    private URL_STAT = "http://localhost:8080/v1/statistika";
     private headers: HttpHeaders;
 
     constructor(private http: HttpClient) {
@@ -39,6 +40,12 @@ export class VprasanjaStoritev {
         return this.http.get(url, {headers: this.headers})
             .toPromise()
             .then(res => res as Vprasanje);
+    }
+
+    public pridobiStatistikoVprasanja(id: number) {
+        const url = `${this.URL_STAT}/${id}`;
+        return this.http.get(url, {headers: this.headers})
+            .toPromise();
     }
 
 

@@ -12,6 +12,8 @@ import {OdgovorStoritev} from "./storitve/odgovor.storitev";
 import {VprasanjaComponent} from "./components/vprasanja/vprasanja.component";
 import {StorageStoritev} from "./storitve/storage.storitev";
 import {StatistikaComponent} from "./components/vprasanja/statistika/statistika.component";
+import {Napaka404Component} from "./components/napake/404/404.component";
+import {NovoVprasanjeComponent} from "./components/vprasanja/novo/novo-vprasanje.component";
 
 
 @NgModule({
@@ -19,7 +21,9 @@ import {StatistikaComponent} from "./components/vprasanja/statistika/statistika.
         AppComponent,
         IndexComponent,
         VprasanjaComponent,
-        StatistikaComponent
+        StatistikaComponent,
+        Napaka404Component,
+        NovoVprasanjeComponent
     ],
     imports: [
         BrowserModule,

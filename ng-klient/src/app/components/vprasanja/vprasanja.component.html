@@ -1,6 +1,8 @@
 
 <h2>Seznam vprašanj</h2>
 
+<a [routerLink]="" (click)="pojdiNaNovoVprasanje()">Dodaj vprašanje</a>
+
 <div class="prikazi-elementov">
     <a [routerLink]="" [ngClass]="{'izbrani-limit': limit === 5}" (click)="nastaviLimit(5)">5</a> |
     <a [routerLink]="" [ngClass]="{'izbrani-limit': limit === 20}" (click)="nastaviLimit(20)">20</a> |

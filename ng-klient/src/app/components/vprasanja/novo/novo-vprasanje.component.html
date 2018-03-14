@@ -1,0 +1,18 @@
+<h2>Dodaj vprašanje</h2>
+
+<form (submit)="submitFormo()">
+    <div>
+        <label for="vprasanje">Vprašanje:</label>
+        <input type="text" [(ngModel)]="vprasanje" name="vprasanje" id="vprasanje"/>
+    </div>
+    <div>
+        <button type="button" (click)="dodajVnosnoPolje()">Dodaj možen odgovor</button>
+        <div class="mozni-odgovori" id="mozni-odgovori">
+            <div id="div-vpr_1">
+                <input type="text" name="mozni-odgovor" title="Možni odgovor"/>
+                <a [routerLink]="" (click)="izbrisiVnosnoPolje($event)">X</a>
+            </div>
+        </div>
+    </div>
+    <button type="submit">Shrani</button>
+</form>

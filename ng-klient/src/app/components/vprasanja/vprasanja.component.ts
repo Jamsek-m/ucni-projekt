@@ -52,6 +52,10 @@ export class VprasanjaComponent implements OnInit {
         this.pridobiStranVprasanj(stran);
     }
 
+    pojdiNaNovoVprasanje() {
+        this.router.navigate(["/vprasanja/novo"]);
+    }
+
     private pridobiStranVprasanj(stran: number) {
         const offset: number = (stran - 1) * this.limit;
         this.vprasanja.pridobiVprasanjaPoStraneh(this.limit, offset)

@@ -13,8 +13,8 @@ export class AppComponent {
 
     }
 
-    navigirajUpravljanje() {
-        this.router.navigate(["/upravljaj"]);
+    navigirajUpravljanje(path: string) {
+        this.router.navigate([path]);
     }
 
 }

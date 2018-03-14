@@ -8,11 +8,13 @@ import {Odgovor} from "../../../models/Odgovor";
 @Component({
     selector: "app-statistika-page",
     moduleId: module.id,
-    templateUrl: "statistika.component.html"
+    templateUrl: "statistika.component.html",
+    styleUrls: ["statistika.component.css"]
 })
 export class StatistikaComponent implements OnInit {
     vprasanje: Vprasanje;
     seznamOdgovorov: Odgovor[];
+    seznamStatistike;
 
     constructor(private router: Router, private route: ActivatedRoute,
                 private odgovori: OdgovorStoritev, private vprasanja: VprasanjaStoritev) {
@@ -22,7 +24,12 @@ export class StatistikaComponent implements OnInit {
     ngOnInit(): void {
         this.vprasanje = new Vprasanje();
         this.seznamOdgovorov = [];
+        this.seznamStatistike = [];
         this.pridobiParamId();
+    }
+
+    pojdiNazaj() {
+        this.router.navigate(["/upravljaj"]);
     }
 
     private pridobiParamId() {
@@ -31,6 +38,14 @@ export class StatistikaComponent implements OnInit {
             this.vprasanja.pridobiEnoVprasanje(id).then(
                 (vprasanje) => {
                     this.vprasanje = vprasanje;
+                },
+                (err) => {
+                    console.error(err);
+                }
+            );
+            this.vprasanja.pridobiStatistikoVprasanja(id).then(
+                (stats) => {
+                    this.seznamStatistike = stats;
                 },
                 (err) => {
                     console.error(err);
