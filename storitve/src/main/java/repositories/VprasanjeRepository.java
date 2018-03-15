@@ -13,8 +13,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Random;
+import javax.ws.rs.ext.ExceptionMapper;
+import java.util.*;
 
 @ApplicationScoped
 public class VprasanjeRepository {
@@ -61,23 +61,29 @@ public class VprasanjeRepository {
 	
 	@Transactional
 	public void shraniVprasanje(Vprasanje vprasanje) {
+		vprasanje.setOdgovori(new ArrayList<>());
+		vprasanje.setSeznamMoznihOdgovorov(new ArrayList<>());
 		em.persist(vprasanje);
 	}
 	
 	@Transactional
 	public void izbrisiVprasanje(long vprasanjeId) throws EntitetaNeObstajaException {
 		Vprasanje vprasanje = em.find(Vprasanje.class, vprasanjeId);
-		if(vprasanje != null) {
-			for(MozenOdgovor odg : vprasanje.getSeznamMoznihOdgovorov()) {
-				mozenOdgovorRepository.izbrisiMozenOdgovor(odg.getId());
-			}
-			for(Odgovor odg : vprasanje.getOdgovori()) {
-				odgovorRepository.izbrisiOdgovor(odg.getId());
-			}
-			em.remove(vprasanje);
-		} else {
+		if(vprasanje == null) {
 			throw new EntitetaNeObstajaException();
 		}
+
+		Query query = em.createQuery("DELETE FROM Odgovor o WHERE o.vprasanje.id = :id");
+		query.setParameter("id", vprasanjeId);
+		query.executeUpdate();
+
+		query = em.createQuery("DELETE FROM MozenOdgovor mo WHERE mo.vprasanje.id = :id");
+		query.setParameter("id", vprasanjeId);
+		query.executeUpdate();
+
+		query = em.createQuery("DELETE FROM Vprasanje v WHERE v.id = :id");
+		query.setParameter("id", vprasanjeId);
+		query.executeUpdate();
 	}
 	
 	@Transactional
@@ -86,10 +92,11 @@ public class VprasanjeRepository {
 		if(staroVprasanje == null) {
 			throw new EntitetaNeObstajaException();
 		}
-		staroVprasanje.setOdgovori(vprasanje.getOdgovori());
 		staroVprasanje.setVprasanje(vprasanje.getVprasanje());
-		staroVprasanje.setSeznamMoznihOdgovorov(vprasanje.getSeznamMoznihOdgovorov());
+		staroVprasanje.setSeznamMoznihOdgovorov(new ArrayList<>(vprasanje.getSeznamMoznihOdgovorov()));
+		staroVprasanje.setOdgovori(new ArrayList<>(vprasanje.getOdgovori()));
+
 		em.merge(staroVprasanje);
 	}
-	
+
 }

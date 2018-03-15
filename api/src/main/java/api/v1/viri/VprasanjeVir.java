@@ -141,7 +141,7 @@ public class VprasanjeVir {
 		}
 	)
 	@POST
-	public Response kreirajNovoVprasanje(NovoVprasanjeZahteva zahteva) throws SlabaZahtevaException {
+	public Response kreirajNovoVprasanje(NovoVprasanjeZahteva zahteva) throws SlabaZahtevaException, EntitetaNeObstajaException {
 		if(zahteva.vprasanje.isEmpty()) {
 			throw new SlabaZahtevaException();
 		}

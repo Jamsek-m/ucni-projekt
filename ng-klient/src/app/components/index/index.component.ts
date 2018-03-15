@@ -38,7 +38,6 @@ export class IndexComponent implements OnInit {
             .then(
                 (odgovor) => {
                     this.odgovorZabelezen = true;
-                    console.log("Odgovor zabeležen: ", odgovor);
                 },
                 (err) => {
                     console.error(err);

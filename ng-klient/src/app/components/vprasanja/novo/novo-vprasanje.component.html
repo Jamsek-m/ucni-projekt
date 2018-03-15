@@ -1,6 +1,6 @@
 <h2>Dodaj vprašanje</h2>
 
-<form (submit)="submitFormo()">
+<form (submit)="submitFormo()" *ngIf="!shranjeno">
     <div>
         <label for="vprasanje">Vprašanje:</label>
         <input type="text" [(ngModel)]="vprasanje" name="vprasanje" id="vprasanje"/>
@@ -16,3 +16,7 @@
     </div>
     <button type="submit">Shrani</button>
 </form>
+<div *ngIf="shranjeno">
+    Vprašanje je bilo shranjeno! <br/>
+    <a [routerLink]="" (click)="pojdiNazajNaSeznam()">Nazaj</a>
+</div>

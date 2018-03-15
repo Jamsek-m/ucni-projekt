@@ -14,6 +14,7 @@ import {StorageStoritev} from "./storitve/storage.storitev";
 import {StatistikaComponent} from "./components/vprasanja/statistika/statistika.component";
 import {Napaka404Component} from "./components/napake/404/404.component";
 import {NovoVprasanjeComponent} from "./components/vprasanja/novo/novo-vprasanje.component";
+import {UrediVprasanjeComponent} from "./components/vprasanja/uredi/uredi-vprasanje.component";
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import {NovoVprasanjeComponent} from "./components/vprasanja/novo/novo-vprasanje
         VprasanjaComponent,
         StatistikaComponent,
         Napaka404Component,
-        NovoVprasanjeComponent
+        NovoVprasanjeComponent,
+        UrediVprasanjeComponent
     ],
     imports: [
         BrowserModule,

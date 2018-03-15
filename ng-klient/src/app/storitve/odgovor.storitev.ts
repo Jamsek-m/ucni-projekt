@@ -9,9 +9,7 @@ export class OdgovorStoritev {
         "Content-Type": "application/json"
     });
 
-    constructor(private http: HttpClient) {
-
-    }
+    constructor(private http: HttpClient) {}
 
     public shraniOdgovorNaVprasanje(idVprasanja: number, idOdgovora: number): Promise<any> {
         const podatki = JSON.stringify({
@@ -30,7 +28,9 @@ export class OdgovorStoritev {
             .then(res => res as Odgovor[]);
     }
 
-
-
+    public izbrisiOdgovor(id: number): Promise<any> {
+        const url = `${this.URL}/${id}`;
+        return this.http.delete(url, {headers: this.headers}).toPromise();
+    }
 
 }

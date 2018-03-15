@@ -5,9 +5,7 @@ import entitete.MozenOdgovor;
 import entitete.Odgovor;
 import entitete.Vprasanje;
 import napake.EntitetaNeObstajaException;
-import repositories.MozenOdgovorRepository;
 import repositories.OdgovorRepository;
-import repositories.VprasanjeRepository;
 import zahteve.odgovor.NovOdgovorZahteva;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -22,10 +20,10 @@ public class OdgovorStoritev {
 	private OdgovorRepository odgovorRepository;
 
 	@Inject
-	private MozenOdgovorRepository mozenOdgovorRepository;
-	
+	private MozenOdgovorStoritev mozenOdgovorStoritev;
+
 	@Inject
-	private VprasanjeRepository vprasanjeRepository;
+	private VprasanjeStoritev vprasanjeStoritev;
 	
 	public List<Odgovor> vrniVseOdgovore(QueryParameters query) {
 		return odgovorRepository.poisciVseOdgovore(query);
@@ -49,12 +47,21 @@ public class OdgovorStoritev {
 		odgovor.setUstvarjenOb(datum);
 		odgovor.setPosodobljenOb(datum);
 
-		MozenOdgovor mozenOdgovor = mozenOdgovorRepository.poisciEnOdgovor(req.odgovor);
+		MozenOdgovor mozenOdgovor = mozenOdgovorStoritev.vrniEnMozenOdgovor(req.odgovor);
 		odgovor.setOdgovor(mozenOdgovor.getTipOdgovora());
 
-		Vprasanje vprasanje = vprasanjeRepository.poisciEnoVprasanje(req.idVprasanja);
+		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.idVprasanja);
 		odgovor.setVprasanje(vprasanje);
-		
+		vprasanje.getOdgovori().add(odgovor);
+
+		vprasanjeStoritev.posodobiVprasanje(vprasanje);
+		return odgovor;
+	}
+
+	public Odgovor shraniOdgovor(Odgovor odgovor) {
+		Date datum = new Date();
+		odgovor.setUstvarjenOb(datum);
+		odgovor.setPosodobljenOb(datum);
 		odgovorRepository.shraniOdgovor(odgovor);
 		return odgovor;
 	}
@@ -63,14 +70,21 @@ public class OdgovorStoritev {
 		Odgovor odgovor = odgovorRepository.poisciEnOdgovor(id);
 		odgovor.setPosodobljenOb(new Date());
 
-		MozenOdgovor mozenOdgovor = mozenOdgovorRepository.poisciEnOdgovor(req.odgovor);
+		MozenOdgovor mozenOdgovor = mozenOdgovorStoritev.vrniEnMozenOdgovor(req.odgovor);
 		odgovor.setOdgovor(mozenOdgovor.getTipOdgovora());
 
-		Vprasanje vprasanje = vprasanjeRepository.poisciEnoVprasanje(req.idVprasanja);
+		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.idVprasanja);
 		odgovor.setVprasanje(vprasanje);
 		
 		odgovorRepository.posodobiOdgovor(odgovor, id);
 		return odgovor;
+	}
+
+	public Odgovor posodobiOdgovor(Odgovor odgovor) throws EntitetaNeObstajaException {
+		odgovor.setPosodobljenOb(new Date());
+		odgovorRepository.posodobiOdgovor(odgovor, odgovor.getId());
+		return odgovor;
+
 	}
 	
 	public void izbrisiOdgovor(long id) throws EntitetaNeObstajaException {

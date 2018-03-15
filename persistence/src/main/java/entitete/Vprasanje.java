@@ -19,10 +19,10 @@ public class Vprasanje implements Serializable {
 	
 	private String vprasanje;
 	
-	@OneToMany(mappedBy = "vprasanje")
+	@OneToMany(mappedBy = "vprasanje", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MozenOdgovor> seznamMoznihOdgovorov;
 	
-	@OneToMany(mappedBy = "vprasanje")
+	@OneToMany(mappedBy = "vprasanje", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Odgovor> odgovori;
 	
 	public Vprasanje() {}

@@ -5,7 +5,7 @@ import {Component, OnInit} from "@angular/core";
     moduleId: module.id,
     templateUrl: "404.component.html"
 })
-export class Napaka404Component implements OnInit{
+export class Napaka404Component implements OnInit {
 
     constructor() {
 

@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
-import {Vprasanje} from "../../../models/Vprasanje";
 import {VprasanjaStoritev} from "../../../storitve/vprasanja.storitev";
 import {Router} from "@angular/router";
 import {MozenOdgovor} from "../../../models/MozenOdgovor";
+import {NovoVprasanjeRequest} from "../../../models/request/NovoVprasanjeRequest";
 
 @Component({
     selector: "app-novo-vpr-page",
@@ -13,6 +13,7 @@ export class NovoVprasanjeComponent implements OnInit {
     vprasanje: string;
     mozniOdgovori: MozenOdgovor[];
     steviloVnosnihPolj: number;
+    shranjeno: boolean;
 
     constructor(private vprasanja: VprasanjaStoritev, private router: Router) {
 
@@ -22,6 +23,7 @@ export class NovoVprasanjeComponent implements OnInit {
         this.vprasanje = "";
         this.mozniOdgovori = [];
         this.steviloVnosnihPolj = 1;
+        this.shranjeno = false;
     }
 
     dodajVnosnoPolje() {
@@ -50,17 +52,40 @@ export class NovoVprasanjeComponent implements OnInit {
         parent.appendChild(div);
     }
 
+    // noinspection JSMethodCanBeStatic
     izbrisiVnosnoPolje(event) {
         const target = event.target || event.srcElement || event.currentTarget;
         const div = target.parentElement;
-        const id = div.id;
+        // const id = div.id;
         div.remove();
     }
 
     submitFormo() {
+        if (!this.vprasanje) {
+            return false;
+        }
+
         const inputs = Array.from(document.getElementsByName("mozni-odgovor"));
-        const results = inputs.map((item: HTMLInputElement) => item.value);
-        // TODO: dodaj shranjevanje
+        const results: string[] = inputs
+            .map((item: HTMLInputElement) => item.value)
+            .filter((item) => {
+                return item !== null && item !== undefined && item !== "";
+            });
+        const podatki = new NovoVprasanjeRequest(this.vprasanje, results);
+
+        this.vprasanja.shraniVprasanje(podatki).then(
+            () => {
+                this.shranjeno = true;
+            },
+            (err) => {
+                console.error(err);
+            }
+        );
+    }
+
+    pojdiNazajNaSeznam() {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(["/upravljaj"]);
     }
 
 }

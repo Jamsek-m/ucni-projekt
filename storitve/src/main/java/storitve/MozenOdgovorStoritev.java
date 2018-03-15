@@ -5,12 +5,11 @@ import entitete.MozenOdgovor;
 import entitete.Vprasanje;
 import napake.EntitetaNeObstajaException;
 import repositories.MozenOdgovorRepository;
-import repositories.VprasanjeRepository;
 import zahteve.mozenodgovor.NovMozenOdgovorZahteva;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.ext.ExceptionMapper;
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -20,7 +19,7 @@ public class MozenOdgovorStoritev {
 	private MozenOdgovorRepository mozenOdgovorRepository;
 
 	@Inject
-	private VprasanjeRepository vprasanjeRepository;
+	private VprasanjeStoritev vprasanjeStoritev;
 	
 	public List<MozenOdgovor> vrniVseMozneOdgovore(QueryParameters query) {
 		return mozenOdgovorRepository.poisciVseMozneOdgovore(query);
@@ -39,19 +38,24 @@ public class MozenOdgovorStoritev {
 	}
 	
 	public MozenOdgovor shraniMozenOdgovor(NovMozenOdgovorZahteva req) throws EntitetaNeObstajaException {
-		Vprasanje vprasanje = vprasanjeRepository.poisciEnoVprasanje(req.vprasanjeId);
+		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.vprasanjeId);
 		MozenOdgovor odgovor = new MozenOdgovor(req.odgovor, vprasanje);
 
 		mozenOdgovorRepository.shraniMozenOdgovor(odgovor);
 
         vprasanje.getSeznamMoznihOdgovorov().add(odgovor);
-        vprasanjeRepository.shraniVprasanje(vprasanje);
+        vprasanjeStoritev.shraniVprasanje(vprasanje);
 
+		return odgovor;
+	}
+
+	public MozenOdgovor shraniMozenOdgovor(MozenOdgovor odgovor) throws EntitetaNeObstajaException {
+		mozenOdgovorRepository.shraniMozenOdgovor(odgovor);
 		return odgovor;
 	}
 	
 	public MozenOdgovor posodobiMozenOdgovor(NovMozenOdgovorZahteva req, long idMoznegaOdgovora) throws EntitetaNeObstajaException {
-		Vprasanje vprasanje = vprasanjeRepository.poisciEnoVprasanje(req.vprasanjeId);
+		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.vprasanjeId);
 		MozenOdgovor odgovor = mozenOdgovorRepository.poisciEnOdgovor(idMoznegaOdgovora);
 		
 		odgovor.setVprasanje(vprasanje);
@@ -61,9 +65,29 @@ public class MozenOdgovorStoritev {
 
 		return odgovor;
 	}
+
+	public MozenOdgovor posodobiMozenOdgovor(MozenOdgovor odgovor) throws EntitetaNeObstajaException {
+		mozenOdgovorRepository.posodobiMozenOdgovor(odgovor, odgovor.getId());
+		return odgovor;
+	}
 	
 	public void izbrisiMozenOdgovor(long id) throws EntitetaNeObstajaException {
+		MozenOdgovor odgovor = mozenOdgovorRepository.poisciEnOdgovor(id);
+
+		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(odgovor.getVprasanje().getId());
+
+		List<MozenOdgovor> seznam = new ArrayList<>(vprasanje.getSeznamMoznihOdgovorov());
+		MozenOdgovor toDelete = null;
+		for (MozenOdgovor mozenOdgovor : seznam) {
+			if (mozenOdgovor.getId() == odgovor.getId()) {
+				toDelete = mozenOdgovor;
+			}
+		}
+		seznam.remove(toDelete);
+		vprasanje.setSeznamMoznihOdgovorov(new ArrayList<>(seznam));
+
 		mozenOdgovorRepository.izbrisiMozenOdgovor(id);
+		vprasanjeStoritev.posodobiVprasanje(vprasanje);
 	}
 	
 }

@@ -1,14 +1,45 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>NgKlient</title>
-  <base href="/">
+    <meta charset="utf-8">
+    <title>NgKlient</title>
+    <base href="/">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <style>
+        .loading-screen {
+            opacity: 0;
+            transition: opacity .8s ease-in-out;
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: #000;
+            z-index: -1;
+        }
+
+        app-root:empty + .loading-screen {
+            opacity: 1;
+            z-index: 100;
+        }
+
+        app-root:empty + .loading-screen h1 {
+            color: #eee;
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            transform: translate(0, -50%);
+        }
+    </style>
 </head>
 <body>
-  <app-root></app-root>
+    <app-root></app-root>
+    <div class="loading-screen">
+        <h1>Nalagam...</h1>
+    </div>
 </body>
 </html>

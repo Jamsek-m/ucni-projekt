@@ -29,7 +29,38 @@ export class StatistikaComponent implements OnInit {
     }
 
     pojdiNazaj() {
+        // noinspection JSIgnoredPromiseFromCall
         this.router.navigate(["/upravljaj"]);
+    }
+
+    urediVprasanje() {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(["vprasanja", this.vprasanje.id, "uredi"]);
+    }
+
+    izbrisiVprasanje() {
+        if (this.vprasanje.id !== 0) {
+            this.vprasanja.izbrisiVprasanje(this.vprasanje.id).then(
+                () => {
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigate(["upravljaj"]);
+                },
+                (err) => {
+                    console.error(err);
+                }
+            );
+        }
+    }
+
+    izbrisiOdgovor(id: number) {
+        this.odgovori.izbrisiOdgovor(id).then(
+            () => {
+                this.pridobiParamId();
+            },
+            (err) => {
+                console.error(err);
+            }
+        );
     }
 
     private pridobiParamId() {
@@ -53,14 +84,6 @@ export class StatistikaComponent implements OnInit {
             );
             this.odgovori.poisciOdgovoreVprasanja(id).then(
                 (odgovori) => {
-                    const seznam = odgovori.map((item: Odgovor) => {
-                       return {
-                           id: item.id,
-                           ustvarjenOb: new Date(item.ustvarjenOb),
-                           posodobljenOb: new Date(item.posodobljenOb),
-                           odgovor: item.odgovor
-                       };
-                    });
                     this.seznamOdgovorov = odgovori;
                 },
                 (err) => {

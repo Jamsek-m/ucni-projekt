@@ -1,25 +1,42 @@
 
-<h2>Podrobnosti vprašanja</h2>
+<h1>Podrobnosti vprašanja</h1>
 
 <a [routerLink]="" (click)="pojdiNazaj()">Nazaj</a>
 
-<h3>Vprašanje: {{vprasanje.vprasanje}}</h3>
+<h2>Vprašanje: {{vprasanje.vprasanje}}</h2>
 
-<h4>Statistika</h4>
+<a [routerLink]="" (click)="urediVprasanje()">Uredi</a> | <a [routerLink]="" (click)="izbrisiVprasanje()">Izbriši</a>
+
+<h3>Statistika</h3>
 <div class="statistika">
+    <h4>Možni odgovori:</h4>
+    <div class="mozni-odgovori">
+        <ul>
+            <li *ngFor="let item of vprasanje.seznamMoznihOdgovorov">
+                {{item.tipOdgovora}}
+            </li>
+        </ul>
+    </div>
+
+    <h4>Podani odgovori:</h4>
     <table>
         <tr>
-            <th>Odgovor</th>
-            <th>Frekvenca</th>
+            <th class="desna-meja">Odgovor</th>
+            <th class="desna-meja">Frekvenca</th>
+            <th>Procent</th>
         </tr>
         <tr *ngFor="let stat of seznamStatistike">
-            <td>{{stat.odgovor}}</td>
-            <td>{{stat.steviloOdgovorov}}</td>
+            <td class="desna-meja">{{stat.odgovor}}</td>
+            <td class="desna-meja">{{stat.steviloOdgovorov}}</td>
+            <td>{{stat.procent | percent}}</td>
         </tr>
     </table>
 </div>
 
-<h4>Odgovori</h4>
+<h3>Odgovori</h3>
 <div class="odgovori" *ngFor="let odg of seznamOdgovorov">
-    {{odg.posodobljenOb | date: 'dd.MM.yyyy HH:mm:ss'}}&#160;&#160;&#160;&#160;{{odg.odgovor}}
+    <a [routerLink]="" (click)="izbrisiOdgovor(odg.id)" class="izbrisi-odgovor">x</a>
+    <span>
+        {{odg.posodobljenOb | date: 'dd.MM.yyyy HH:mm:ss'}}&#160;&#160;&#160;&#160;{{odg.odgovor}}
+    </span>
 </div>

@@ -1,3 +1,18 @@
 th, td {
     text-align: center;
+    padding: 3px;
+}
+th {
+    font-weight: normal;
+    border-bottom: 1px solid black;
+}
+table {
+    border-collapse: collapse;
+}
+.desna-meja {
+    border-right: 1px solid black;
+}
+.izbrisi-odgovor {
+    color: red;
+    text-decoration: none;
 }

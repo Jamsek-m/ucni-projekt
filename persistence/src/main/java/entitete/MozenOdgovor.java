@@ -20,7 +20,7 @@ public class MozenOdgovor implements Serializable {
 	@Column(name = "tip_odgovora")
 	private String tipOdgovora;
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	@JoinColumn(name = "vprasanje_id")
 	private Vprasanje vprasanje;
 	

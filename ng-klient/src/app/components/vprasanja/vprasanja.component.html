@@ -4,6 +4,7 @@
 <a [routerLink]="" (click)="pojdiNaNovoVprasanje()">Dodaj vprašanje</a>
 
 <div class="prikazi-elementov">
+    Št. elementov za prikaz:
     <a [routerLink]="" [ngClass]="{'izbrani-limit': limit === 5}" (click)="nastaviLimit(5)">5</a> |
     <a [routerLink]="" [ngClass]="{'izbrani-limit': limit === 20}" (click)="nastaviLimit(20)">20</a> |
     <a [routerLink]="" [ngClass]="{'izbrani-limit': limit === 50}" (click)="nastaviLimit(50)">50</a>
@@ -16,11 +17,11 @@
         </li>
     </ul>
     <div class="navigacija-strani" *ngIf="seznamVsehStrani.length > 1">
+        Strani:
         <span *ngFor="let stran of seznamVsehStrani">
-            <a [routerLink]="" (click)="pojdiNaStran(stran)" class="stran-povezava">{{stran}}</a>
+            <a [routerLink]="" (click)="pojdiNaStran(stran)" [ngClass]="{'trenutna-stran': trenutnaStran === stran}" class="stran-povezava">{{stran}}</a>
             <span *ngIf="stran != seznamVsehStrani.length">-</span>
         </span>
     </div>
-
 
 </div>
