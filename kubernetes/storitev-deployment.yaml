@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Program Files (x86)\Kubernetes\kompose-windows-amd64.exe convert
+    kompose.version: 1.10.0 (8bb0907)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: storitev
+  name: storitev
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: storitev
+    spec:
+      containers:
+      - env:
+        - name: KUMULUZEE_CONFIG_ETCD_HOSTS
+          value: http://etcd:2379
+        - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+          value: jdbc:postgresql://postgres:5432/ucni_projekt
+        - name: KUMULUZEE_DISCOVERY_ETCD_HOSTS
+          value: http://etcd:2379
+        - name: KUMULUZEE_HEALTH_CHECKS_ETCDHEALTHCHECK_CONNECTIONURL
+          value: http://etcd:2379/health
+        image: mjamsek/ucni-projekt:latest
+        name: storitev
+        ports:
+        - containerPort: 8080
+        resources: {}
+      restartPolicy: Always
+status: {}

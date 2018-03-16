@@ -1,17 +1,62 @@
 version: "3"
 services:
+  etcd:
+    image: quay.io/coreos/etcd:latest
+    ports:
+      - "2379:2379"
+    volumes:
+      - etcd:/etcd_data
+    command:
+      - /usr/local/bin/etcd
+      - -name
+      - etcd
+      - --data-dir
+      - /etcd_data
+      - -advertise-client-urls
+      - http://etcd:2379
+      - -listen-client-urls
+      - http://0.0.0.0:2379
+      - -initial-advertise-peer-urls
+      - http://etcd:2380
+      - -listen-peer-urls
+      - http://0.0.0.0:2380
+      - -initial-cluster
+      - etcd=http://etcd:2380
+      - -initial-cluster-token
+      - my-etcd-token
+      - -initial-cluster-state
+      - new
+      - -cors="*"
+  etcd-browser:
+    image: buddho/etcd-browser:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - ETCD_HOST=etcd
+      - ETCD_PORT=2379
+    depends_on:
+      - etcd
   postgres:
     image: postgres:latest
     environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=ucni_projekt
     ports:
-      - "5433:5432"
+      - "5432:5432"
   storitev:
     image: mjamsek/ucni-projekt:latest
     environment:
-      - KUMULUZEE_DATASOURCES0_CONNECTIONURL=jdbc:postgresql://postgres:5433/ucni_projekt
+    # host 193.2.176.43
+      - KUMULUZEE_DATASOURCES0_CONNECTIONURL=jdbc:postgresql://postgres:5432/ucni_projekt
+      - KUMULUZEE_CONFIG_ETCD_HOSTS=http://etcd:2379
+      - KUMULUZEE_DISCOVERY_ETCD_HOSTS=http://etcd:2379
+      - KUMULUZEE_HEALTH_CHECKS_ETCDHEALTHCHECK_CONNECTIONURL=http://etcd:2379/health
     ports:
       - "8080:8080"
     depends_on:
+      - etcd
       - postgres
+volumes:
+  etcd:
+  driver:

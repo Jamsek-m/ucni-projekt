@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Program Files (x86)\Kubernetes\kompose-windows-amd64.exe convert
+    kompose.version: 1.10.0 (8bb0907)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: etcd-browser
+  name: etcd-browser
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: etcd-browser
+    spec:
+      containers:
+      - env:
+        - name: ETCD_HOST
+          value: etcd
+        - name: ETCD_PORT
+          value: "2379"
+        image: buddho/etcd-browser:latest
+        name: etcd-browser
+        ports:
+        - containerPort: 8000
+        resources: {}
+      restartPolicy: Always
+status: {}
