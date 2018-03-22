@@ -1,16 +1,20 @@
 package api.v1.viri;
 
+import config.RestConfigProps;
 import api.v1.preslikovalci.MapperResponseObject;
 import entitete.unmapped.StatistikaVprasanja;
+import interceptorji.maintenancemode.NaVoljo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import napake.AppVVzdrzevanjuException;
 import napake.EntitetaNeObstajaException;
 import repositories.StatistikaRepository;
 import storitve.VprasanjeStoritev;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -23,9 +27,6 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class StatistikaVir {
-
-    @Inject
-    private VprasanjeStoritev vprasanjeStoritev;
 
     @Inject
     private StatistikaRepository statistikaRepository;
@@ -62,6 +63,5 @@ public class StatistikaVir {
         List<StatistikaVprasanja> seznam = statistikaRepository.vrniStatistikoVprasanja(id);
         return Response.status(Response.Status.OK).entity(seznam).build();
     }
-
 
 }

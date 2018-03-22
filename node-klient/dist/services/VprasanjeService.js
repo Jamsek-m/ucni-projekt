@@ -6,7 +6,7 @@ const ServiceDiscovery_1 = require("../lib/ServiceDiscovery");
 class VprasanjeService {
     static pridobiSeznamVprasanj(callback) {
         const config = new DiscoveryConfig_1.DiscoveryConfig("dev", "vprasanja-service", "1.0.0");
-        const serviceDiscovery = new ServiceDiscovery_1.ServiceDiscovery("http://localhost:2379");
+        const serviceDiscovery = new ServiceDiscovery_1.ServiceDiscovery("http://159.122.178.28:30079");
         serviceDiscovery.pridobiURLStoritve(config, (napaka, urlStoritve) => {
             if (napaka) {
                 return callback(napaka);
@@ -21,7 +21,8 @@ class VprasanjeService {
                         return callback(null, body);
                     }
                     else {
-                        return callback({ napaka: `${resp.statusCode} - ${resp.statusMessage ? resp.statusMessage : "Napaka"}`,
+                        return callback({
+                            napaka: `${resp.statusCode} - ${resp.statusMessage ? resp.statusMessage : "Napaka"}`,
                         });
                     }
                 });

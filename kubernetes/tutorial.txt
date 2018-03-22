@@ -1,0 +1,17 @@
+deploy vse gor
+
+* da izpostavis storitev:
+kubectl expose service <service_name> --type=NodePort --name=<ime_izpostavljene_storitve> --port=<port kjer teče app>
+
+* Da dobiš NodePort (izpostavljen port)
+kubectl describe service storitev
+
+* da dobiš public IP od clustra
+bx cs workers mycluster
+
+* token za login:
+kubectl config view -o jsonpath='{.users[0].user.auth-provider.config.id-token}'
+
+* zaženi dashboard
+$Env:KUBECONFIG="C:\Users\miha_\.bluemix\plugins\container-service\clusters\mycluster\kube-config-mil01-mycluster.yml"
+kubectl proxy

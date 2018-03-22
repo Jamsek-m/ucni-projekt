@@ -10,85 +10,100 @@ import zahteve.odgovor.NovOdgovorZahteva;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
 public class OdgovorStoritev {
-	
-	@Inject
-	private OdgovorRepository odgovorRepository;
 
-	@Inject
-	private MozenOdgovorStoritev mozenOdgovorStoritev;
+    @Inject
+    private OdgovorRepository odgovorRepository;
 
-	@Inject
-	private VprasanjeStoritev vprasanjeStoritev;
-	
-	public List<Odgovor> vrniVseOdgovore(QueryParameters query) {
-		return odgovorRepository.poisciVseOdgovore(query);
-	}
+    @Inject
+    private MozenOdgovorStoritev mozenOdgovorStoritev;
 
-	public List<Odgovor> vrniVseOdgovoreVprasanja(long idVprasanja) {
-		return odgovorRepository.pridobiOdgovoreVprasanja(idVprasanja);
-	}
+    @Inject
+    private VprasanjeStoritev vprasanjeStoritev;
 
-	public Odgovor vrniEnOdgovor(long id) throws EntitetaNeObstajaException {
-		return odgovorRepository.poisciEnOdgovor(id);
-	}
-	
-	public long prestejVseZadetke() {
-		return odgovorRepository.prestejVseZadetke();
-	}
-	
-	public Odgovor shraniOdgovor(NovOdgovorZahteva req) throws EntitetaNeObstajaException {
-		Odgovor odgovor = new Odgovor();
-		Date datum = new Date();
-		odgovor.setUstvarjenOb(datum);
-		odgovor.setPosodobljenOb(datum);
+    public List<Odgovor> vrniVseOdgovore(QueryParameters query) {
+        return odgovorRepository.poisciVseOdgovore(query);
+    }
 
-		MozenOdgovor mozenOdgovor = mozenOdgovorStoritev.vrniEnMozenOdgovor(req.odgovor);
-		odgovor.setOdgovor(mozenOdgovor.getTipOdgovora());
+    public List<Odgovor> vrniVseOdgovoreVprasanja(long idVprasanja) {
+        return odgovorRepository.pridobiOdgovoreVprasanja(idVprasanja);
+    }
 
-		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.idVprasanja);
-		odgovor.setVprasanje(vprasanje);
-		vprasanje.getOdgovori().add(odgovor);
+    public Odgovor vrniEnOdgovor(long id) throws EntitetaNeObstajaException {
+        return odgovorRepository.poisciEnOdgovor(id);
+    }
 
-		vprasanjeStoritev.posodobiVprasanje(vprasanje);
-		return odgovor;
-	}
+    public long prestejVseZadetke() {
+        return odgovorRepository.prestejVseZadetke();
+    }
 
-	public Odgovor shraniOdgovor(Odgovor odgovor) {
-		Date datum = new Date();
-		odgovor.setUstvarjenOb(datum);
-		odgovor.setPosodobljenOb(datum);
-		odgovorRepository.shraniOdgovor(odgovor);
-		return odgovor;
-	}
-	
-	public Odgovor posodobiOdgovor(NovOdgovorZahteva req, long id) throws EntitetaNeObstajaException {
-		Odgovor odgovor = odgovorRepository.poisciEnOdgovor(id);
-		odgovor.setPosodobljenOb(new Date());
+    public Odgovor shraniOdgovor(NovOdgovorZahteva req) throws EntitetaNeObstajaException {
+        Odgovor odgovor = new Odgovor();
+        Date datum = new Date();
+        odgovor.setUstvarjenOb(datum);
+        odgovor.setPosodobljenOb(datum);
 
-		MozenOdgovor mozenOdgovor = mozenOdgovorStoritev.vrniEnMozenOdgovor(req.odgovor);
-		odgovor.setOdgovor(mozenOdgovor.getTipOdgovora());
+        MozenOdgovor mozenOdgovor = mozenOdgovorStoritev.vrniEnMozenOdgovor(req.odgovor);
+        odgovor.setOdgovor(mozenOdgovor.getTipOdgovora());
 
-		Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.idVprasanja);
-		odgovor.setVprasanje(vprasanje);
-		
-		odgovorRepository.posodobiOdgovor(odgovor, id);
-		return odgovor;
-	}
+        Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.idVprasanja);
+        odgovor.setVprasanje(vprasanje);
+        vprasanje.getOdgovori().add(odgovor);
 
-	public Odgovor posodobiOdgovor(Odgovor odgovor) throws EntitetaNeObstajaException {
-		odgovor.setPosodobljenOb(new Date());
-		odgovorRepository.posodobiOdgovor(odgovor, odgovor.getId());
-		return odgovor;
+        vprasanjeStoritev.posodobiVprasanje(vprasanje);
+        return odgovor;
+    }
 
-	}
-	
-	public void izbrisiOdgovor(long id) throws EntitetaNeObstajaException {
-		odgovorRepository.izbrisiOdgovor(id);
-	}
-	
+    public Odgovor shraniOdgovor(Odgovor odgovor) {
+        Date datum = new Date();
+        odgovor.setUstvarjenOb(datum);
+        odgovor.setPosodobljenOb(datum);
+        odgovorRepository.shraniOdgovor(odgovor);
+        return odgovor;
+    }
+
+    public Odgovor posodobiOdgovor(NovOdgovorZahteva req, long id) throws EntitetaNeObstajaException {
+        Odgovor odgovor = odgovorRepository.poisciEnOdgovor(id);
+        odgovor.setPosodobljenOb(new Date());
+
+        MozenOdgovor mozenOdgovor = mozenOdgovorStoritev.vrniEnMozenOdgovor(req.odgovor);
+        odgovor.setOdgovor(mozenOdgovor.getTipOdgovora());
+
+        Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(req.idVprasanja);
+        odgovor.setVprasanje(vprasanje);
+
+        odgovorRepository.posodobiOdgovor(odgovor, id);
+        return odgovor;
+    }
+
+    public Odgovor posodobiOdgovor(Odgovor odgovor) throws EntitetaNeObstajaException {
+        odgovor.setPosodobljenOb(new Date());
+        odgovorRepository.posodobiOdgovor(odgovor, odgovor.getId());
+        return odgovor;
+
+    }
+
+    public void izbrisiOdgovor(long id) throws EntitetaNeObstajaException {
+        Odgovor odgovor = odgovorRepository.poisciEnOdgovor(id);
+        Vprasanje vprasanje = vprasanjeStoritev.vrniEnoVprasanje(odgovor.getVprasanje().getId());
+
+        List<Odgovor> odgovori = new ArrayList<>(vprasanje.getOdgovori());
+        Odgovor toDelete = null;
+        for (Odgovor odg : odgovori) {
+			if(odg.getId() == odgovor.getId()) {
+			    toDelete = odg;
+            }
+        }
+        odgovori.remove(toDelete);
+        vprasanje.setOdgovori(new ArrayList<>(odgovori));
+
+        odgovorRepository.izbrisiOdgovor(id);
+        vprasanjeStoritev.posodobiVprasanje(vprasanje);
+    }
+
 }

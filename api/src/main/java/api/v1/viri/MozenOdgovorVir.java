@@ -1,19 +1,23 @@
 package api.v1.viri;
 
+import config.RestConfigProps;
 import api.v1.preslikovalci.MapperResponseObject;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import entitete.MozenOdgovor;
+import interceptorji.maintenancemode.NaVoljo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import napake.AppVVzdrzevanjuException;
 import napake.EntitetaNeObstajaException;
 import napake.SlabaZahtevaException;
 import responses.vprasanje.FindAllResponse;
 import storitve.MozenOdgovorStoritev;
 import zahteve.mozenodgovor.NovMozenOdgovorZahteva;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,37 +32,37 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class MozenOdgovorVir {
-	
-	@Inject
-	private MozenOdgovorStoritev mozenOdgovorStoritev;
-	
-	@Context
-	private UriInfo uriInfo;
 
-	@Operation(
-		summary = "Pridobi seznam možnih odgovorov",
-		tags = {"možni odgovor"},
-		description = "Vrne seznam vseh možnih odgovorov",
-		responses = {
-			@ApiResponse(
-				description = "Seznam možnih odgovorov", responseCode = "200",
-				content = @Content(
-					schema = @Schema(
-						implementation = FindAllResponse.class
-					)
-				),
+    @Inject
+    private MozenOdgovorStoritev mozenOdgovorStoritev;
+
+    @Context
+    private UriInfo uriInfo;
+
+    @Operation(
+        summary = "Pridobi seznam možnih odgovorov",
+        tags = {"možni odgovor"},
+        description = "Vrne seznam vseh možnih odgovorov",
+        responses = {
+            @ApiResponse(
+                description = "Seznam možnih odgovorov", responseCode = "200",
+                content = @Content(
+                    schema = @Schema(
+                        implementation = FindAllResponse.class
+                    )
+                ),
                 headers = {@Header(name = "Seznam odgovorov", schema = @Schema(type = "FindAllResponse"))}
-			)
-		}
-	)
-	@GET
-	public Response vrniVse() {
-		QueryParameters query = QueryParameters.query(uriInfo.getRequestUri().getQuery()).build();
-		List<MozenOdgovor> seznam = mozenOdgovorStoritev.vrniVseMozneOdgovore(query);
-		long steviloVsehZadetkov = mozenOdgovorStoritev.prestejVseZadetke();
-		FindAllResponse res = new FindAllResponse(seznam, steviloVsehZadetkov, query);
-		return Response.status(Response.Status.OK).entity(res).build();
-	}
+            )
+        }
+    )
+    @GET
+    public Response vrniVse() {
+        QueryParameters query = QueryParameters.query(uriInfo.getRequestUri().getQuery()).build();
+        List<MozenOdgovor> seznam = mozenOdgovorStoritev.vrniVseMozneOdgovore(query);
+        long steviloVsehZadetkov = mozenOdgovorStoritev.prestejVseZadetke();
+        FindAllResponse res = new FindAllResponse(seznam, steviloVsehZadetkov, query);
+        return Response.status(Response.Status.OK).entity(res).build();
+    }
 
     @Operation(
         summary = "Pridobi možne odgovore podanega vprašanja",
@@ -84,12 +88,12 @@ public class MozenOdgovorVir {
             )
         }
     )
-	@GET
-	@Path("vprasanje/{id}")
-	public Response vrniVseOdVprasanja(@PathParam("id") long idVprasanja) {
-		List<MozenOdgovor> seznam = mozenOdgovorStoritev.vrniVseMozneOdgovoreVprasanja(idVprasanja);
-		return Response.status(Response.Status.OK).entity(seznam).build();
-	}
+    @GET
+    @Path("vprasanje/{id}")
+    public Response vrniVseOdVprasanja(@PathParam("id") long idVprasanja) {
+        List<MozenOdgovor> seznam = mozenOdgovorStoritev.vrniVseMozneOdgovoreVprasanja(idVprasanja);
+        return Response.status(Response.Status.OK).entity(seznam).build();
+    }
 
     @Operation(
         summary = "Pridobi možen odgovor",
@@ -114,12 +118,12 @@ public class MozenOdgovorVir {
             )
         }
     )
-	@GET
-	@Path("{id}")
-	public Response vrniEnega(@PathParam("id") long id) throws EntitetaNeObstajaException {
-		MozenOdgovor odgovor = mozenOdgovorStoritev.vrniEnMozenOdgovor(id);
-		return Response.status(Response.Status.OK).entity(odgovor).build();
-	}
+    @GET
+    @Path("{id}")
+    public Response vrniEnega(@PathParam("id") long id) throws EntitetaNeObstajaException {
+        MozenOdgovor odgovor = mozenOdgovorStoritev.vrniEnMozenOdgovor(id);
+        return Response.status(Response.Status.OK).entity(odgovor).build();
+    }
 
     @Operation(
         summary = "Shrani možen odgovor",
@@ -136,15 +140,15 @@ public class MozenOdgovorVir {
             )
         }
     )
-	@POST
-	public Response kreirajNovega(NovMozenOdgovorZahteva zahteva)
-		throws EntitetaNeObstajaException, SlabaZahtevaException {
-			if(zahteva.odgovor.isEmpty() || zahteva.vprasanjeId == 0) {
-				throw new SlabaZahtevaException();
-			}
-			MozenOdgovor odgovor = mozenOdgovorStoritev.shraniMozenOdgovor(zahteva);
-			return Response.status(Response.Status.CREATED).entity(odgovor).build();
-	}
+    @POST
+    public Response kreirajNovega(NovMozenOdgovorZahteva zahteva)
+        throws EntitetaNeObstajaException, SlabaZahtevaException {
+        if (zahteva.odgovor.isEmpty() || zahteva.vprasanjeId == 0) {
+            throw new SlabaZahtevaException();
+        }
+        MozenOdgovor odgovor = mozenOdgovorStoritev.shraniMozenOdgovor(zahteva);
+        return Response.status(Response.Status.CREATED).entity(odgovor).build();
+    }
 
     @Operation(
         summary = "Posodobi možen odgovor",
@@ -169,16 +173,16 @@ public class MozenOdgovorVir {
             )
         }
     )
-	@PUT
-	@Path("{id}")
-	public Response posodobi(NovMozenOdgovorZahteva zahteva, @PathParam("id") long id)
-		throws EntitetaNeObstajaException, SlabaZahtevaException {
-			if(zahteva.odgovor.isEmpty() || zahteva.vprasanjeId == 0) {
-				throw new SlabaZahtevaException();
-			}
-			MozenOdgovor odgovor = mozenOdgovorStoritev.posodobiMozenOdgovor(zahteva, id);
-			return Response.status(Response.Status.OK).entity(odgovor).build();
-	}
+    @PUT
+    @Path("{id}")
+    public Response posodobi(NovMozenOdgovorZahteva zahteva, @PathParam("id") long id)
+        throws EntitetaNeObstajaException, SlabaZahtevaException {
+        if (zahteva.odgovor.isEmpty() || zahteva.vprasanjeId == 0) {
+            throw new SlabaZahtevaException();
+        }
+        MozenOdgovor odgovor = mozenOdgovorStoritev.posodobiMozenOdgovor(zahteva, id);
+        return Response.status(Response.Status.OK).entity(odgovor).build();
+    }
 
     @Operation(
         summary = "Izbriši možen odgovor",
@@ -198,11 +202,11 @@ public class MozenOdgovorVir {
             )
         }
     )
-	@DELETE
-	@Path("{id}")
-	public Response izbrisi(@PathParam("id") long id) throws EntitetaNeObstajaException {
-		mozenOdgovorStoritev.izbrisiMozenOdgovor(id);
-		return Response.status(Response.Status.NO_CONTENT).build();
-	}
-	
+    @DELETE
+    @Path("{id}")
+    public Response izbrisi(@PathParam("id") long id) throws EntitetaNeObstajaException {
+        mozenOdgovorStoritev.izbrisiMozenOdgovor(id);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
 }

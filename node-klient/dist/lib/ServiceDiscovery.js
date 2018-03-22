@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // from: https://www.npmjs.com/package/nodejs-etcd
 const Etcd = require("nodejs-etcd");
 const path = require("path");
+const request = require("request");
 class ServiceDiscovery {
     static izberiServis(seznamServisov) {
         const seznam = seznamServisov.map((item) => {
@@ -55,7 +56,17 @@ class ServiceDiscovery {
                                 const teloInstance = JSON.parse(telo);
                                 const seznamInstanc = teloInstance.node.nodes;
                                 const urlStoritve = ServiceDiscovery.izvleciUrlIzNodea(seznamInstanc);
-                                return callback(null, urlStoritve);
+                                const healthCheckUrl = `${urlStoritve}/health`;
+                                request.get({ url: healthCheckUrl, json: true }, (napakaHealthCheck, odgovorHealthCheck, teloHealthCheck) => {
+                                    if (!napakaHealthCheck && teloHealthCheck.outcome === "UP") {
+                                        return callback(null, urlStoritve);
+                                    }
+                                    else {
+                                        return callback({
+                                            napaka: "Storitev je bila najdena, ampak health check vrača status DOWN",
+                                        });
+                                    }
+                                });
                             }
                             else if (resp.status === 404) {
                                 return callback({

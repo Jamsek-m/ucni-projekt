@@ -6,7 +6,8 @@
     "jsRules": {},
     "rules": {
         "no-console": [false],
-        "quotemark": [true, "double"]
+        "quotemark": [true, "double"],
+        "max-line-length": [false]
     },
     "rulesDirectory": []
 }

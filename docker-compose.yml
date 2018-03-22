@@ -57,6 +57,19 @@ services:
     depends_on:
       - etcd
       - postgres
+  klient:
+    image: mjamsek/node-discovery-klient:latest
+    environment:
+      - KUMULUZEE_CONFIG_ETCD_HOSTS=http://etcd:2379
+      - KUMULUZEE_DISCOVERY_ETCD_HOSTS=http://etcd:2379
+    ports:
+      - "3000:3000"
+    depends_on:
+      - etcd
+  angular:
+    image: mjamsek/ucni-projekt-angular:latest
+    ports:
+      - "4200:4200"
 volumes:
   etcd:
   driver:

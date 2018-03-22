@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: C:\Program Files (x86)\Kubernetes\kompose-windows-amd64.exe convert
+    kompose.cmd: C:\Program Files (x86)\Kubernetes\kompose.exe convert
     kompose.version: 1.10.0 (8bb0907)
   creationTimestamp: null
   labels:
@@ -19,27 +19,26 @@ spec:
         io.kompose.service: etcd
     spec:
       containers:
-      - args:
+      - command:
         - /usr/local/bin/etcd
-        - -name
+        - --name
         - etcd
         - --data-dir
         - /etcd_data
-        - -advertise-client-urls
+        - --advertise-client-urls
         - http://etcd:2379
-        - -listen-client-urls
+        - --listen-client-urls
         - http://0.0.0.0:2379
-        - -initial-advertise-peer-urls
+        - --initial-advertise-peer-urls
         - http://etcd:2380
-        - -listen-peer-urls
+        - --listen-peer-urls
         - http://0.0.0.0:2380
-        - -initial-cluster
-        - etcd=http://etcd:2380
-        - -initial-cluster-token
+        - --initial-cluster-token
         - my-etcd-token
-        - -initial-cluster-state
+        - --initial-cluster-state
         - new
-        - -cors="*"
+        - -cors
+        - "*"
         image: quay.io/coreos/etcd:latest
         name: etcd
         ports:
@@ -47,10 +46,9 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /etcd_data
-          name: etcd
+          name: etcddata
       restartPolicy: Always
       volumes:
-      - name: etcd
-        persistentVolumeClaim:
-          claimName: etcd
+      - name: etcddata
+        emptyDir: {}
 status: {}

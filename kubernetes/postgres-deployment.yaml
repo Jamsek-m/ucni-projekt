@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: C:\Program Files (x86)\Kubernetes\kompose-windows-amd64.exe convert
+    kompose.cmd: C:\Program Files (x86)\Kubernetes\kompose.exe convert
     kompose.version: 1.10.0 (8bb0907)
   creationTimestamp: null
   labels:

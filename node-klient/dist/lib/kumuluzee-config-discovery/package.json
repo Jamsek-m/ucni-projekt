@@ -1,0 +1,52 @@
+{
+  "name": "kumuluzee-config-discovery",
+  "version": "1.0.0",
+  "description": "Server for testing KumuluzEE Configuration and Discovery Node.js modules",
+  "main": "server.js",
+  "scripts": {
+    "start": "babel-node server.js",
+    "flow": "flow check ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nejcsm/kumuluzee-config-discovery.git"
+  },
+  "keywords": [
+    "kumuluzee",
+    "discovery",
+    "configuration"
+  ],
+  "author": "Nejc Smolej",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nejcsm/kumuluzee-config-discovery/issues"
+  },
+  "homepage": "https://github.com/nejcsm/kumuluzee-config-discovery#readme",
+  "dependencies": {
+    "consul": "^0.30.0",
+    "express": "^4.16.2",
+    "js-yaml": "^3.10.0",
+    "node-etcd": "^5.1.0",
+    "semver": "^5.5.0",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-eslint": "^8.2.1",
+    "babel-plugin-module-resolver": "^2.4.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "cross-env": "^5.1.0",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-flowtype": "^2.42.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.6.1",
+    "flow-bin": "^0.64.0"
+  }
+}

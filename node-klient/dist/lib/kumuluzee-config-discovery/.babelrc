@@ -1,0 +1,14 @@
+{
+  "presets": [
+    "es2015",
+    "stage-0",
+    "flow"
+  ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./"],
+    }],
+    "transform-class-properties",
+    "transform-flow-strip-types"
+  ]
+}

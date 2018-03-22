@@ -1,9 +1,10 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import * as logger from "morgan";
-import * as path from "path";
 
+import {KumuluzeeDiscovery} from "./lib/kumuluzee-config-discovery/modules/discovery/index";
 import IndexRouter from "./routes/IndexRouter";
+import MessageRouter from "./routes/MessageRouter";
 
 class App {
 
@@ -11,6 +12,7 @@ class App {
 
     constructor() {
         this.express = express();
+        this.registerService();
         this.middleware();
         this.routes();
     }
@@ -24,7 +26,13 @@ class App {
     private routes(): void {
         const router = express.Router();
 
-        this.express.use("/", IndexRouter);
+        this.express.use("/vprasanja", IndexRouter);
+        this.express.use("/api/v1/sporocila", MessageRouter);
+    }
+
+    private async registerService() {
+        await KumuluzeeDiscovery.initialize({extension: "etcd"});
+        KumuluzeeDiscovery.registerService();
     }
 
 }

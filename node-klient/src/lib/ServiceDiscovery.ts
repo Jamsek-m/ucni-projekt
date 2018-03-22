@@ -1,6 +1,7 @@
 // from: https://www.npmjs.com/package/nodejs-etcd
 import * as Etcd from "nodejs-etcd";
 import * as path from "path";
+import * as request from "request";
 import { DiscoveryConfig } from "./DiscoveryConfig";
 
 export class ServiceDiscovery {
@@ -64,7 +65,17 @@ export class ServiceDiscovery {
                                 const seznamInstanc = teloInstance.node.nodes;
 
                                 const urlStoritve = ServiceDiscovery.izvleciUrlIzNodea(seznamInstanc);
-                                return callback(null, urlStoritve);
+                                const healthCheckUrl = `${urlStoritve}/health`;
+                                request.get({url: healthCheckUrl, json: true},
+                                    (napakaHealthCheck, odgovorHealthCheck, teloHealthCheck) => {
+                                        if (!napakaHealthCheck && teloHealthCheck.outcome === "UP") {
+                                            return callback(null, urlStoritve);
+                                        } else {
+                                            return callback({
+                                                napaka: "Storitev je bila najdena, ampak health check vrača status DOWN",
+                                            });
+                                        }
+                                });
                             } else if (resp.status === 404) {
                                 return callback({
                                     napaka: `${resp.status} - Zahtevana storitev ne obstaja!`,

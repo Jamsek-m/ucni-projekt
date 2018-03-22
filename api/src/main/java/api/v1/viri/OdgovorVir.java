@@ -1,14 +1,16 @@
 package api.v1.viri;
 
+import config.RestConfigProps;
 import api.v1.preslikovalci.MapperResponseObject;
-import com.kumuluz.ee.cors.annotations.CrossOrigin;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import entitete.Odgovor;
+import interceptorji.maintenancemode.NaVoljo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import napake.AppVVzdrzevanjuException;
 import napake.EntitetaNeObstajaException;
 import napake.SlabaZahtevaException;
 import org.eclipse.microprofile.metrics.Counter;
@@ -20,6 +22,7 @@ import responses.vprasanje.FindAllResponse;
 import storitve.OdgovorStoritev;
 import zahteve.odgovor.NovOdgovorZahteva;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -119,6 +122,7 @@ public class OdgovorVir {
     @GET
     @Path("vprasanje/{id}")
     public Response vrniOdgovoreVprasanja(@PathParam("id") long id) {
+
         List<Odgovor> seznam = odgovorStoritev.vrniVseOdgovoreVprasanja(id);
         return Response.status(Response.Status.OK).entity(seznam).build();
     }

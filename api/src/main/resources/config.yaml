@@ -47,6 +47,4 @@ kumuluzee:
     ui:
       enabled: true
 rest-config:
-  string-property: Tork
-  boolean-property: true
-  integer-property: 23
+  maintenance-mode: false

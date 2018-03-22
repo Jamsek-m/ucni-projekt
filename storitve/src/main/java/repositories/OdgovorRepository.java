@@ -62,6 +62,9 @@ public class OdgovorRepository {
 	
 	@Transactional
 	public void izbrisiOdgovor(long id) throws EntitetaNeObstajaException {
+
+
+
 		Odgovor odgovor = em.find(Odgovor.class, id);
 		if(odgovor == null) {
 			throw new EntitetaNeObstajaException();

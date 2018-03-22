@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Program Files (x86)\Kubernetes\kompose.exe convert
+    kompose.version: 1.10.0 (8bb0907)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: angular
+  name: angular
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: angular
+    spec:
+      containers:
+      - image: mjamsek/ucni-projekt-angular:latest
+        name: angular
+        ports:
+        - containerPort: 4200
+        resources: {}
+      restartPolicy: Always
+status: {}

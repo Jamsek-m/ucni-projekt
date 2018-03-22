@@ -1,10 +1,12 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Odgovor} from "../models/Odgovor";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class OdgovorStoritev {
-    private URL = "http://localhost:8080/v1/odgovori";
+    private BASE_URL: string = environment.api;
+    private URL = `${environment.api}/v1/odgovori`;
     private headers: HttpHeaders = new HttpHeaders({
         "Content-Type": "application/json"
     });
